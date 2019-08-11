@@ -1,0 +1,114 @@
+
+.board
+{
+
+
+}
+
+.board .row
+{
+    font-size:0;
+}
+.board .row .square 
+{
+    display:inline-block;
+    height: 100px;
+    width: 100px;
+    border: 1px;
+}
+
+.board .row .square.white
+{
+    background-color: darkkhaki;
+}
+
+.board .row .square.black
+{
+    background-color: green;
+}
+
+.square.piece-darkpawn
+{
+    background-image: url(/resources/pieces/Chess_pdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-lightpawn
+{
+    background-image: url(/resources/pieces/Chess_plt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-darkbishop
+{
+    background-image: url(/resources/pieces/Chess_bdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.square.piece-lightbishop
+{
+    background-image: url(/resources/pieces/Chess_blt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.square.piece-darkrook
+{
+    background-image: url(/resources/pieces/Chess_rdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-lightrook
+{
+    background-image: url(/resources/pieces/Chess_rlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-darkknight
+{
+    background-image: url(/resources/pieces/Chess_ndt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-lightknight
+{
+    background-image: url(/resources/pieces/Chess_nlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-darkking
+{
+    background-image: url(/resources/pieces/Chess_kdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-lightking
+{
+    background-image: url(/resources/pieces/Chess_klt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-darkqueen
+{
+    background-image: url(/resources/pieces/Chess_qdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.square.piece-lightqueen
+{
+    background-image: url(/resources/pieces/Chess_qlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
