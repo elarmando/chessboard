@@ -1,15 +1,15 @@
 
-.board
+.chessboard
 {
 
 
 }
 
-.board .row
+.chessboard .row
 {
     font-size:0;
 }
-.board .row .square 
+.chessboard .row .square 
 {
     display:inline-block;
     height: 100px;
@@ -17,12 +17,12 @@
     border: 1px;
 }
 
-.board .row .square.white
+.chessboard .row .square.white
 {
     background-color: darkkhaki;
 }
 
-.board .row .square.black
+.chessboard .row .square.black
 {
     background-color: green;
 }
