@@ -1,14 +1,13 @@
 (function(){
 
+    var chessboard = null;
+    var ui = null;
 
     var init =  function()
     {
-        var chessboard = new ChessBoard();
+        chessboard = new ChessBoard();
+        ui = new ChessboardIU(".chessboard", chessboard);
         var factory = new PieceFactory();
-
-
-        debugger;
-      
 
         for(var i = 0; i < 8; i++)
         {
@@ -40,37 +39,8 @@
         chessboard.addPiece(7,6,factory.createLightKight());
         chessboard.addPiece(7, 7, factory.createLightRook());
 
-        draw(chessboard); 
+        ui.draw();
     
-    }
-    
-    var draw = function(chessboard)
-    {
-        var squares = document.querySelectorAll(".chessboard .row .square");
-
-         for(var i = 0; i < squares.length; i++ )
-         {
-         
-                var domSquare = squares[i];
-                var col = i % 8; 
-                var row = parseInt( i / 8);
-                
-                var r = chessboard.squares[row];
-                var sq = r[col];
-
-                if(sq.piece == null)
-                {
-
-                }
-                else
-                {
-                    domSquare.className += " " +sq.piece.className;
-                }
-
-         }
-
-        
-
     }
     
     window.onload  = init;
