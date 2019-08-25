@@ -7,6 +7,7 @@ function ChessboardIU(selector, chessboard)
 
     var draggingElement = null;
     var isMouseDown = false;
+    var squareOrigin = null;
     
     var mouseX = 0;
     var mouseY = 0;
@@ -41,11 +42,15 @@ function ChessboardIU(selector, chessboard)
     
     this._mouseDown = function(e)
     {
+        //prevents the on drag start event, avoiding clonflics
+        e.preventDefault();
         var square = this;
         var piece = square.querySelector(".piece");
 
         if(piece != null)
         {
+            squareOrigin = square;
+            console.log("Down");
             mouseX = e.clientX;
             mouseY = e.clientY;
             
@@ -60,19 +65,20 @@ function ChessboardIU(selector, chessboard)
             document.body.appendChild(draggingElement);
             piece.remove();
 
-            document.addEventListener("mousemove", self._mouseMove, true );
-            document.addEventListener("mouseup", self._mouseUp, false);
-            
-        } 
+            console.log("dragg created");
+            document.body.addEventListener("mousemove", self._mouseMove, false);
 
+        } 
     }
     
     this._mouseMove = function(e)
     {
-       
-
+        
         if(!isMouseDown)
+        {
+            console.log("not down");
             return;
+        }
 
         var deltaX = e.clientX - mouseX;
         var deltaY = e.clientY - mouseY;
@@ -81,6 +87,8 @@ function ChessboardIU(selector, chessboard)
 
         var newX = rect.x + deltaX;
         var newY = rect.y + deltaY;
+
+        console.log("X:" + newX + ", Y:" + newY);
 
         draggingElement.style.top = newY + "px";
         draggingElement.style.left = newX + "px";
@@ -96,26 +104,36 @@ function ChessboardIU(selector, chessboard)
     {
         if(!isMouseDown)
             return;
-
+        
+        //first stop the move event
+      
         isMouseDown = false;
 
+        //verify if the pieces was dropped in the a square
         var classTarget = e.currentTarget.className;
+        var squareDestiny = null;
 
         if(classTarget != null && classTarget.includes("square"))
         {
-            var clone = draggingElement.cloneNode(true);
-            clone.className = clone.className.replace("dragging", "");
-            
-            e.currentTarget.appendChild(clone);
+            squareDestiny = e.currentTarget;
         }
         else
         {
-            draggingElement.remove();
-
+           squareDestiny = squareOrigin;
         }
         
+        var clone = draggingElement.cloneNode(true);
+        
+        clone.className = clone.className.replace("dragging", "");
+        clone.style.top = '';
+        clone.style.left = '';
+            
+        squareDestiny.appendChild(clone);
+        
         draggingElement.remove();
+        document.body.removeEventListener("mousemove", self._mouseMove, false);
         draggingElement = null;
+        squareOrigin = null;
     }
     
     this._init = function()
@@ -127,10 +145,13 @@ function ChessboardIU(selector, chessboard)
         {
             var domSquare = squares[i];
 
+            
             domSquare.addEventListener("mousedown", this._mouseDown, true);
-            //domSquare.addEventListener("mouseup", this._mouseUp, false);
-            //domSquare.addEventListener("mousemove", this._mouseMove, true);
+            domSquare.addEventListener("mouseup", this._mouseUp, true);
         }
+
+       
+        
         
     }
 
