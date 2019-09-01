@@ -48,13 +48,23 @@ function ChessboardIU(selector, chessboard)
     {
         var clone = self.pickedPiece.cloneNode(true);
         
-        if(square != null)
-        {
-            square.appendChild(clone);
-        }
-        else
+        if(square == null)//if the piece wasn't dropped on a square, move the piece to the original square
         {
             self.originPickedPiece.appendChild(clone);
+        }
+        else{
+        
+            var originSquareString = getSquareString(self.originPickedPiece);
+            var destinySquareString = getSquareString(square);
+
+            if(self.chessboard.isValidMove(originSquareString, destinySquareString))
+            {
+                square.appendChild(clone);
+            }
+            else
+            {
+                self.originPickedPiece.appendChild(clone);
+            }
         }
         
        self.pickedPiece.remove();
@@ -67,6 +77,11 @@ function ChessboardIU(selector, chessboard)
         self.originPickedPiece = originSquare;
         self.pickedPiece = pickecPiece.cloneNode(true);
         pickecPiece.remove();
+    }
+
+    var getSquareString = function(square)
+    {
+        return square.id;
     }
 
     this._init();

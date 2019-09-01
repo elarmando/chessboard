@@ -36,7 +36,47 @@
 
             if(piece)
                 square.piece = piece;
-        }           
+        }          
+        
+        this.isValidMove = function(from, to)
+        {
+            var fromSquare = convertSquareString(from);
+            var toSquare = convertSquareString(to);
+            
+            if(fromSquare == null)
+                return false;
+            
+
+            var pieceOrig = this.squares[fromSquare.row][fromSquare.col].piece;
+
+
+            if(pieceOrig == null)
+                return false;
+            
+            var validmove = pieceOrig.isValidMove(fromSquare.row, fromSquare.col, toSquare.row, toSquare.col);
+
+            return validmove;
+        }
+        
+        var convertSquareString = function(square)
+        {
+            var cols = {'a': 0,'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7
+            };
+            
+            var rows = { '8': 0, '7': 1, '6': 2, '5':3,'4':4,'3':5, '2':6, '1':7
+            }
+
+            if(square.length != 2)
+                return null;
+            
+            var col = cols[square.charAt(0)];
+            var row = rows[square.charAt(1)];
+
+            if(col == undefined || row == undefined)
+                return null;
+
+            return {col : col, row : row};
+        }
         
         this._init();
     }
@@ -46,9 +86,37 @@
         this.piece = null;
     }
     
-    function Piece()
+    function Piece(iswhite)
     {
         this.className;
+        this.isWhite = iswhite;
+        
+        this.isValidMove = function(origRow, origCol, destRow, destCol)
+        {
+            return true;
+        }
+    }
+    
+  
+
+    function CreateKnight(iswhite)
+    {
+        var piece = new Piece(iswhite);
+        piece.className = (iswhite) ? PIECES.L_KNIGHT: PIECES.D_KNIGHT;
+
+        piece.isValidMove = function(origRow, origCol, destRow, destCol)
+        {
+            debugger;
+            if(Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
+                return true;
+
+            if(Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol == 1))
+                return true;
+
+            return false;
+        }
+        
+        return piece;
     }
 
     function PieceFactory()
@@ -83,16 +151,12 @@
                                     
          this.createDarkKight = function()
         {
-            var piece = new Piece();
-            piece.className = PIECES.D_KNIGHT;
-            return piece;
+            return CreateKnight(false);
         }      
                                        
         this.createLightKight = function()
         {
-            var piece = new Piece();
-            piece.className = PIECES.L_KNIGHT;
-            return piece;
+           return CreateKnight(true);
         }    
 
         this.createDarkQueen = function()
