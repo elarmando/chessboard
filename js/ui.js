@@ -4,15 +4,12 @@ function ChessboardIU(selector, chessboard)
     this.container = selector;
     this.elem = null;
     this.chessboard = chessboard;
-
-    var draggingElement = null;
-    var isMouseDown = false;
-    var squareOrigin = null;
+    this.dragPieces = null;
     
-    var mouseX = 0;
-    var mouseY = 0;
+    this.pickedPiece = null;
+    this.originPickedPiece = null;
 
-    this.draw = function(chessboard)
+   this.draw = function(chessboard)
     {
         var chessboard = this.chessboard;
           var squares = document.querySelectorAll(this.container + " .row .square");
@@ -39,7 +36,76 @@ function ChessboardIU(selector, chessboard)
 
          }
     }
+   
+    this._init = function()
+    {
+        this.dragPieces = new DraggPieces(this.container);
+        this.dragPieces.OnDropPiece = OnDroppedPiece;
+        this.dragPieces.OnPickPiece = OnPickPiece;
+    }
     
+    var OnDroppedPiece = function( square)
+    {
+        var clone = self.pickedPiece.cloneNode(true);
+        
+        if(square != null)
+        {
+            square.appendChild(clone);
+        }
+        else
+        {
+            self.originPickedPiece.appendChild(clone);
+        }
+        
+       self.pickedPiece.remove();
+       self.pickedPiece = null;
+       self.originPickedPiece = null;
+    }
+    
+    var OnPickPiece = function(pickecPiece, originSquare )
+    {
+        self.originPickedPiece = originSquare;
+        self.pickedPiece = pickecPiece.cloneNode(true);
+        pickecPiece.remove();
+    }
+
+    this._init();
+    
+}
+
+function DraggPieces(container)
+{
+    this.OnPickPiece = null;
+    this.OnDropPiece = null;
+    this.container = container;
+    this.elem = null;
+
+    var draggingElement = null;
+    var isMouseDown = false;
+    var squareOrigin = null;
+    var self = this;
+    
+    var mouseX = 0;
+    var mouseY = 0;
+
+    this._init = function()
+    {
+        this.elem = document.querySelectorAll(this.container);
+        var squares = document.querySelectorAll(this.container + " .row .square");
+        
+        for(var i = 0; i < squares.length; i++)
+        {
+            var domSquare = squares[i];
+
+            
+            domSquare.addEventListener("mousedown", this._mouseDown, true);
+            domSquare.addEventListener("mouseup", this._mouseUp, true);
+        }
+        
+        document.body.addEventListener("mouseup", this._mouseUp, false);
+    }
+
+   
     this._mouseDown = function(e)
     {
         //prevents the on drag start event, avoiding clonflics
@@ -50,7 +116,7 @@ function ChessboardIU(selector, chessboard)
         if(piece != null)
         {
             squareOrigin = square;
-            console.log("Down");
+            
             mouseX = e.clientX;
             mouseY = e.clientY;
             
@@ -63,10 +129,11 @@ function ChessboardIU(selector, chessboard)
             draggingElement.style.left = rect.x + "px";
 
             document.body.appendChild(draggingElement);
-            piece.remove();
-
-            console.log("dragg created");
+           
             document.body.addEventListener("mousemove", self._mouseMove, false);
+
+            if(self.OnPickPiece instanceof Function)
+                self.OnPickPiece(piece, squareOrigin);
 
         } 
     }
@@ -76,7 +143,7 @@ function ChessboardIU(selector, chessboard)
         
         if(!isMouseDown)
         {
-            console.log("not down");
+           
             return;
         }
 
@@ -117,10 +184,7 @@ function ChessboardIU(selector, chessboard)
         {
             squareDestiny = e.currentTarget;
         }
-        else
-        {
-           squareDestiny = squareOrigin;
-        }
+       
         
         var clone = draggingElement.cloneNode(true);
         
@@ -128,33 +192,22 @@ function ChessboardIU(selector, chessboard)
         clone.style.top = '';
         clone.style.left = '';
             
-        squareDestiny.appendChild(clone);
-        
+           
         draggingElement.remove();
         document.body.removeEventListener("mousemove", self._mouseMove, false);
         draggingElement = null;
         squareOrigin = null;
+        
+        if(self.OnDropPiece instanceof Function)
+        {
+            self.OnDropPiece(squareDestiny);
+        }
     }
     
-    this._init = function()
-    {
-        this.elem = document.querySelectorAll(this.container);
-        var squares = document.querySelectorAll(this.container + " .row .square");
-        
-        for(var i = 0; i < squares.length; i++)
-        {
-            var domSquare = squares[i];
-
-            
-            domSquare.addEventListener("mousedown", this._mouseDown, true);
-            domSquare.addEventListener("mouseup", this._mouseUp, true);
-        }
-
-       
-        
-        
-    }
-
     this._init();
+}
+
+function ChessboardController()
+{
     
 }
