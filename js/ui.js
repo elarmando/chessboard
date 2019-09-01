@@ -60,6 +60,7 @@ function ChessboardIU(selector, chessboard)
             if(self.chessboard.isValidMove(originSquareString, destinySquareString))
             {
                 square.appendChild(clone);
+                self.chessboard.move(originSquareString, destinySquareString);
             }
             else
             {

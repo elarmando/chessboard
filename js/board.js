@@ -38,6 +38,23 @@
                 square.piece = piece;
         }          
         
+        this.move = function(from, to)
+        {
+            var fromSquare = convertSquareString(from);
+            var toSquare = convertSquareString(to);
+            
+            if(fromSquare == null && toSquare != null)
+                return;
+
+            var piece = this.squares[fromSquare.row][fromSquare.col];
+
+            if(piece != null)
+            {
+                piece.wasMoved = true;
+                this.squares[toSquare.row][toSquare.col] = piece;
+            }
+        }
+
         this.isValidMove = function(from, to)
         {
             var fromSquare = convertSquareString(from);
@@ -86,139 +103,4 @@
         this.piece = null;
     }
     
-    function Piece(iswhite)
-    {
-        this.className;
-        this.isWhite = iswhite;
-        
-        this.isValidMove = function(origRow, origCol, destRow, destCol)
-        {
-            return true;
-        }
-    }
-    
-  
-
-    function CreateKnight(iswhite)
-    {
-        var piece = new Piece(iswhite);
-        piece.className = (iswhite) ? PIECES.L_KNIGHT: PIECES.D_KNIGHT;
-
-        piece.isValidMove = function(origRow, origCol, destRow, destCol)
-        {
-            debugger;
-            if(Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
-                return true;
-
-            if(Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol == 1))
-                return true;
-
-            return false;
-        }
-        
-        return piece;
-    }
-
-    function PieceFactory()
-    {
-        this.createDarkBishop = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.D_BISHOP;
-            return piece;
-        }
-
-        this.createLightBishop = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.L_BISHOP;
-            return piece;
-        }
-        
-        this.createDarkRook = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.D_ROOK;
-            return piece;
-        }
-
-        this.createLightRook = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.L_ROOK
-            return piece;
-        }
-                                    
-         this.createDarkKight = function()
-        {
-            return CreateKnight(false);
-        }      
-                                       
-        this.createLightKight = function()
-        {
-           return CreateKnight(true);
-        }    
-
-        this.createDarkQueen = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.D_QUEEN;
-            return piece;
-        }      
-                                       
-        this.createLightQueen = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.L_QUEEN;
-            return piece;
-        }   
-        
-        this.createDarkKing = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.D_KING;
-            return piece;
-        }      
-                                       
-        this.createLightKing = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.L_KING;
-            return piece;
-        }   
-
-        this.createDarkPawn = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.D_PAWN;
-            return piece;
-        }      
-                                       
-        this.createLightPawn = function()
-        {
-            var piece = new Piece();
-            piece.className = PIECES.L_PAWN;
-            return piece;
-        }  
-    }
-
-    var PIECES = 
-    {
-        D_BISHOP : "piece-darkbishop",
-        L_BISHOP : "piece-lightbishop",
-
-        D_QUEEN : "piece-darkqueen",
-        L_QUEEN : "piece-lightqueen",
-
-        D_KNIGHT: "piece-darkknight",
-        L_KNIGHT:  "piece-lightknight",
-
-        D_KING : "piece-darkking",
-        L_KING : "piece-lightking",
-
-        D_PAWN : "piece-darkpawn",
-        L_PAWN : "piece-lightpawn",
-
-        D_ROOK : "piece-darkrook",
-        L_ROOK : "piece-lightrook"
-    }
+ 
