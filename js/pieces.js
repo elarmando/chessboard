@@ -4,21 +4,19 @@ function Piece(iswhite)
     this.isWhite = iswhite;
     this.wasMoved = false;
     
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+    Piece.prototype.isValidMove  = function(origRow, origCol, destRow, destCol)
     {
-        return true;
+       return true; 
     }
-
 }
 
-function CreatePawn(isWhite)
+function Pawn(isWhite)
 {
-    var piece = new Piece(isWhite);
-    var self = piece;
-    piece.className = (isWhite) ? PIECES.L_PAWN: PIECES.D_PAWN;
+    var self = this;
+    Piece.call(this, isWhite);
+    this.className = (isWhite) ? PIECES.L_PAWN: PIECES.D_PAWN;
     
-    
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(origCol == destCol)
         {
@@ -34,16 +32,15 @@ function CreatePawn(isWhite)
         return false;
     }
 
-    return piece;
-}
 
-function CreateKing(isWhite)
+}
+function King(isWhite)
 {
-    var piece = new Piece(isWhite);
-    piece.className = (isWhite) ? PIECES.L_KING: PIECES.D_KING;
+    Piece.call(this, isWhite);
+    this.className = (isWhite) ? PIECES.L_KING: PIECES.D_KING;
     
     
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if((Math.abs(origRow - destRow) <= 1) && (Math.abs(origCol - destCol) <= 1))
         {
@@ -52,17 +49,15 @@ function CreateKing(isWhite)
 
         return false;
     }
-    
-    return piece;
 }
 
-function CreateQueen(isWhite)
+function Queen(isWhite)
 {
-    var piece = new Piece(isWhite);
-    piece.className = (isWhite) ? PIECES.L_QUEEN: PIECES.D_QUEEN;
+    Piece.call(this, isWhite);
+    this.className = (isWhite) ? PIECES.L_QUEEN: PIECES.D_QUEEN;
     
     
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
             return true;
@@ -75,51 +70,43 @@ function CreateQueen(isWhite)
 
         return false;
     }
-    
-    return piece;
 }
 
-function CreateBishop(isWhite)
+function Bishop(isWhite)
 {
-    var piece = new Piece(isWhite);
-    piece.className = (isWhite) ? PIECES.L_BISHOP: PIECES.D_BISHOP;
+   Piece.call(this, isWhite);
+   this.className = (isWhite) ? PIECES.L_BISHOP: PIECES.D_BISHOP;
     
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+   this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
             return true;
         return false;
     }
-    
-    return piece;
 }
-
-function CreateKnight(isWhite)
+function Knight(isWhite)
 {
-    var piece = new Piece(isWhite);
-    piece.className = (isWhite) ? PIECES.L_KNIGHT: PIECES.D_KNIGHT;
+    Piece.call(this, isWhite);
+    this.className = (isWhite) ? PIECES.L_KNIGHT: PIECES.D_KNIGHT;
 
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
-        debugger;
         if(Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
             return true;
 
-        if(Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol == 1))
+        if(Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol) == 1)
             return true;
 
         return false;
     }
-    
-    return piece;
 }
 
-function CreateRook(isWhite)
+function Rook(isWhite)
 {
-    var piece = new Piece(isWhite);
-    piece.className = (isWhite) ? PIECES.L_ROOK: PIECES.D_ROOK;
+    Piece.call(isWhite);
+    this.className = (isWhite) ? PIECES.L_ROOK: PIECES.D_ROOK;
     
-    piece.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
             return true;
@@ -129,71 +116,68 @@ function CreateRook(isWhite)
             
         return false;
     }
-    
-    return piece;
 }
-
 
 function PieceFactory()
 {
     this.createDarkBishop = function()
     {
-       return CreateBishop(false);
+       return new Bishop(false);
     }
 
     this.createLightBishop = function()
     {
-        return CreateBishop(true);
+        return new Bishop(true);
     }
     
     this.createDarkRook = function()
     {
-        return CreateRook(false);
+        return new Rook(false);
     }
 
     this.createLightRook = function()
     {
-        return CreateRook(true);
+        return new Rook(true);
     }
                                 
      this.createDarkKight = function()
     {
-        return CreateKnight(false);
+        return new Knight(false);
     }      
                                    
     this.createLightKight = function()
     {
-       return CreateKnight(true);
+       return new Knight(true);
     }    
 
     this.createDarkQueen = function()
     {
-        return CreateQueen(false);
+        return new Queen(false);
     }      
                                    
     this.createLightQueen = function()
     {
-        return CreateQueen(true);
+        return new Queen(true);
     }   
     
     this.createDarkKing = function()
     {
-        return CreateKing(false);
+        return new King(false);
     }      
                                    
     this.createLightKing = function()
     {
-        return CreateKing(true);
+        return new King(true);
     }   
 
     this.createDarkPawn = function()
     {
-        return CreatePawn(false);
+        return new Pawn(false);
     }      
                                    
     this.createLightPawn = function()
     {
-        return CreatePawn(true);
+        return new Pawn(true);
     }  
 }
 

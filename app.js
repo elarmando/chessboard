@@ -40,10 +40,10 @@
         chessboard.addPiece(7, 7, factory.createLightRook());
 
         ui.draw();
+        
+      
     
     }
     
     window.onload  = init;
-
-
 })();
