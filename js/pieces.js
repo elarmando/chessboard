@@ -14,33 +14,69 @@ function Pawn(isWhite)
 {
     var self = this;
     Piece.call(this, isWhite);
+    this.direction = (isWhite) ? 1 : -1;
     this.className = (isWhite) ? PIECES.L_PAWN: PIECES.D_PAWN;
     
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+    this.isValidMove = function(dataSquareOrig, dataSquareDest, chessboard)
     {
-        if(origCol == destCol)
-        {
-            var increment = self.isWhite ? -1: 1;
+        if(this.canMoveForward(dataSquareOrig, dataSquareDest))
+            return true;
 
-            if( origRow + increment  == destRow)
-                return true;
-
-            if(!self.wasMoved && origRow + (2*increment) == destRow)
-                return true;
-        }
-        
+        if(this.canMoveDiagonal(dataSquareOrig, dataSquareDest))
+            return true;
+              
         return false;
     }
 
+    this.canMoveForward = function(dataSquareOrig, dataSquareDest)
+    {
+     /*
+         pawn can move forward one square and two squares in the first movement
+         only if destiny is a free square 
+        */
+        
+        if(dataSquareOrig.col == dataSquareDest.col)
+        {
+            var increment = this.direction * 1;
+            var origRow = dataSquareOrig.row;
+            var destRow = dataSquareDest.row;
 
+            if( origRow + increment  == destRow && dataSquareDest.piece == null)
+                return true;
+
+            if(!self.wasMoved && origRow + (2*increment) == destRow && dataSquareDest.piece == null)
+                return true;
+        }
+ 
+        return false;
+    }
+
+    this.canMoveDiagonal = function(squareOrig, squareDest)
+    {
+        var dir = this.direction * 1;
+        var isRighDiagonal = squareOrig.col == squareDest.col + 1 && squareOrig.row + dir == squareDest.row; 
+        var canCapture = squareDest.piece != null && squareDest.piece.isWhite != this.isWhite;
+        
+        if(isRighDiagonal && canCapture)
+            return true;
+
+        var isLeftDiagonal = squareOrig.col = squareDest.col  - 1 && squareOrig.row + dir == squareDest.row;
+        
+        if(isLeftDiagonal && canCapture)
+            return true;
+
+        return false;
+    }
+    
 }
+
 function King(isWhite)
 {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KING: PIECES.D_KING;
     
     
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+   /*  this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if((Math.abs(origRow - destRow) <= 1) && (Math.abs(origCol - destCol) <= 1))
         {
@@ -48,7 +84,7 @@ function King(isWhite)
         }
 
         return false;
-    }
+    } */
 }
 
 function Queen(isWhite)
@@ -57,7 +93,7 @@ function Queen(isWhite)
     this.className = (isWhite) ? PIECES.L_QUEEN: PIECES.D_QUEEN;
     
     
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+    /* this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
             return true;
@@ -69,27 +105,27 @@ function Queen(isWhite)
             return true;
 
         return false;
-    }
+    } */
 }
 
 function Bishop(isWhite)
 {
    Piece.call(this, isWhite);
    this.className = (isWhite) ? PIECES.L_BISHOP: PIECES.D_BISHOP;
-    
+  /*   
    this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
             return true;
         return false;
-    }
+    } */
 }
 function Knight(isWhite)
 {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KNIGHT: PIECES.D_KNIGHT;
 
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+    /* this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
             return true;
@@ -98,7 +134,7 @@ function Knight(isWhite)
             return true;
 
         return false;
-    }
+    } */
 }
 
 function Rook(isWhite)
@@ -106,7 +142,7 @@ function Rook(isWhite)
     Piece.call(isWhite);
     this.className = (isWhite) ? PIECES.L_ROOK: PIECES.D_ROOK;
     
-    this.isValidMove = function(origRow, origCol, destRow, destCol)
+   /*  this.isValidMove = function(origRow, origCol, destRow, destCol)
     {
         if(Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
             return true;
@@ -115,7 +151,7 @@ function Rook(isWhite)
             return true;
             
         return false;
-    }
+    } */
 }
 
 function PieceFactory()

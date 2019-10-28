@@ -21,7 +21,7 @@ function ChessboardIU(selector, chessboard)
                 var col = i % 8; 
                 var row = parseInt( i / 8);
                 
-                var r = chessboard.squares[row];
+                var r = chessboard.squares[7 - row];
                 var sq = r[col];
 
                 if(sq.piece == null)
@@ -59,7 +59,11 @@ function ChessboardIU(selector, chessboard)
 
             if(self.chessboard.isValidMove(originSquareString, destinySquareString))
             {
+                if(square.children.length > 0)
+                    square.removeChild(square.children[0]);
+                    
                 square.appendChild(clone);
+                    
                 self.chessboard.move(originSquareString, destinySquareString);
             }
             else

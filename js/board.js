@@ -24,8 +24,13 @@
             }
         }
         
-        this.addPiece = function(row, col, piece)
+        this.addPiece = function(squareStrings, piece)
         {
+            var square = convertSquareString(squareStrings);
+
+            var row =  square.row;
+            var col = square.col;
+            
            if(row > 8 || row < 0) 
                 return;
 
@@ -64,15 +69,19 @@
                 return false;
             
 
-            var pieceOrig = this.squares[fromSquare.row][fromSquare.col].piece;
-
-
+            var pieceOrig = this.squares[fromSquare.row][fromSquare.col];
+            var pieceDest = this.squares[toSquare.row][toSquare.col];
+            
             if(pieceOrig == null)
                 return false;
+                
+            var dataOrig = new DataSquare(fromSquare.col, fromSquare.row, pieceOrig ? pieceOrig.piece : null);
+            var dataDest = new DataSquare(toSquare.col, toSquare.row,pieceDest ? pieceDest.piece: null);
             
-            var validmove = pieceOrig.isValidMove(fromSquare.row, fromSquare.col, toSquare.row, toSquare.col);
+            var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
 
-            return validmove;
+
+            return validMove;
         }
         
         var convertSquareString = function(square)
@@ -80,7 +89,7 @@
             var cols = {'a': 0,'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7
             };
             
-            var rows = { '8': 0, '7': 1, '6': 2, '5':3,'4':4,'3':5, '2':6, '1':7
+            var rows = { '8': 7, '7': 6, '6': 5, '5':4,'4':3,'3':2, '2':1, '1':0
             }
 
             if(square.length != 2)
@@ -96,6 +105,13 @@
         }
         
         this._init();
+    }
+    
+    function DataSquare(col, row, piece)
+    {
+        this.col = col;
+        this.row = row;
+        this.piece = piece;
     }
     
     function Square()
