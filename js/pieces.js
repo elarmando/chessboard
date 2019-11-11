@@ -2,9 +2,17 @@ function Piece(iswhite) {
     this.className;
     this.isWhite = iswhite;
     this.wasMoved = false;
+    this.row = undefined;
+    this.col = undefined;
 
     this.isValidMove = function (origRow, origCol, destRow, destCol) {
         return true;
+    }
+    
+    this.getAttackedSquares = function()
+    {
+    
+        return [];
     }
 }
 
@@ -13,6 +21,36 @@ function Pawn(isWhite) {
     Piece.call(this, isWhite);
     this.direction = (isWhite) ? 1 : -1;
     this.className = (isWhite) ? PIECES.L_PAWN : PIECES.D_PAWN;
+    
+    this.getAttackedSquares = function(chessboard)
+    {
+        var squares = [];
+        
+        if(this.col != undefined && this.row != undefined)
+        {
+            squares.push(chessboard.getSquare(this.row + this.direction*1, this.col + 1));
+            squares.push(chessboard.getSquare(this.row + this.direction*1, this.col - 1));
+        }
+        
+        var filteredSquares = [];
+
+        squares.forEach(function(s){
+            //if the square is empty or the destionation piece is other color
+            
+            if(s != null)
+            {
+                
+                if(!s.piece || s.piece.isWhite != this.isWhite)
+                {
+                    filteredSquares.push(s);
+                }
+            }
+            
+        });
+
+        
+        return filteredSquares;
+    }
 
     this.isValidMove = function (dataSquareOrig, dataSquareDest, chessboard) {
         if (this.canMoveForward(dataSquareOrig, dataSquareDest))

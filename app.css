@@ -34,6 +34,16 @@
     background-color: green;
 }
 
+.chessboard .row .square.black.attacked
+{
+    background-color: red;
+}
+
+.chessboard .row .square.white.attacked
+{
+    background-color: orange;
+}
+
 .piece.piece-darkpawn
 {
     background-image: url(/resources/pieces/Chess_pdt60.png);

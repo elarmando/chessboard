@@ -41,8 +41,43 @@
             var square = this.squares[row][col];
 
             if(piece)
+            {
                 square.piece = piece;
+                piece.col = col;
+                piece.row  = row;
+            }
+                
         }          
+
+        this.getPiece = function(row, col)
+        {
+            if(typeof row == "string")
+            {
+                var square = convertSquareString(row);
+
+                if(square)
+                {
+                    row = square.row;
+                    col = square.col;
+                }
+            }
+            
+            var piece = this.squares[row][col];
+            piece = (piece == undefined)? null: piece.piece;
+            
+            return piece;
+        }
+
+        this.getSquare = function(row, col)
+        {
+            if(!this.squares[row][col])
+                return null;
+            
+            var piece = this.squares[row][col].piece;
+           var dataSquare = new DataSquare(col, row, piece);
+            
+            return dataSquare;
+        }
         
         this.move = function(from, to)
         {
@@ -64,6 +99,9 @@
                     square.piece = null;
                     piece.wasMoved = true;
                     destSquare.piece = piece;
+
+                    piece.col = toSquare.col;
+                    piece.row = toSquare.row;
                     
                     this.isWhiteTurn = !this.isWhiteTurn;
                 }
@@ -104,6 +142,24 @@
             var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
 
             return validMove;
+        }
+
+        this.convertPositionToString = function(col, row)
+        {
+             var cols = {0 :'a',1 : 'b',2: 'c', 3: 'd', 4 : 'e',5: 'f',6 :  'g', 7: 'h'
+            };
+            
+            var rows = { 7: '8', 6: '7', 5: '6', 4:'5',3:'4',2:'3', 1:'2', 0:'1'
+            }
+            
+            var res = null;
+
+            if(cols[col] != undefined && rows[row] != undefined)
+            {
+                res  = cols[col] + rows[row];
+            }
+            
+            return res;
         }
         
         var convertSquareString = function(square)

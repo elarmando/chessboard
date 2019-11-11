@@ -36,12 +36,64 @@ function ChessboardIU(selector, chessboard)
 
          }
     }
+
+
    
     this._init = function()
     {
         this.dragPieces = new DraggPieces(this.container);
         this.dragPieces.OnDropPiece = OnDroppedPiece;
         this.dragPieces.OnPickPiece = OnPickPiece;
+    }
+
+    this._drawAttacked = function(squares)
+    {
+
+        squares.forEach(s => {
+          var elem = self._getSquare(s.col, s.row);
+          
+          if(elem)
+          {
+              elem.className += " attacked";
+          }
+          
+        });
+    }
+
+    this._drawUnattacked = function()
+    {
+        var squares = document.querySelectorAll(this.container + " .row .square");
+
+        for(var i = 0; i < squares.length; i++)
+        {
+            var square = squares[i];
+
+            var index = square.className.indexOf("attacked");
+            
+            if(index > -1)
+            {
+                var firstPart =  square.className.substring(0, index );
+                var secondPart =  square.className.substring(index + 8, square.className.length );
+
+                square.className = firstPart + " " + secondPart;
+
+            }
+
+
+        }
+    }
+
+    this._getSquare = function(col, row)
+    {
+        var id = self.chessboard.convertPositionToString(col, row);
+        var squareElem = null;
+        
+        if(id)
+        {
+            squareElem = document.getElementById(id);
+        }
+        
+        return squareElem;
     }
     
     var OnDroppedPiece = function( square)
@@ -71,6 +123,8 @@ function ChessboardIU(selector, chessboard)
                 self.originPickedPiece.appendChild(clone);
             }
         }
+
+        self._drawUnattacked();
         
        self.pickedPiece.remove();
        self.pickedPiece = null;
@@ -79,6 +133,18 @@ function ChessboardIU(selector, chessboard)
     
     var OnPickPiece = function(pickecPiece, originSquare )
     {
+        var originSquareString = getSquareString(originSquare);
+        
+        var piece = self.chessboard.getPiece(originSquareString);
+        
+        if(piece != null)
+        {
+            var squares = piece.getAttackedSquares(self.chessboard);
+            
+            self._drawAttacked(squares);
+        }
+
+
         self.originPickedPiece = originSquare;
         self.pickedPiece = pickecPiece.cloneNode(true);
         pickecPiece.remove();
