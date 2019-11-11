@@ -226,8 +226,3 @@ function DraggPieces(container)
     
     this._init();
 }
-
-function ChessboardController()
-{
-    
-}

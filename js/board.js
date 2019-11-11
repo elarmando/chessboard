@@ -1,6 +1,7 @@
 
     function ChessBoard()
     {
+        this.isWhiteTurn = true;
         this.squares = [];
         
         this._init = function()
@@ -51,13 +52,24 @@
             if(fromSquare == null && toSquare != null)
                 return;
 
-            var piece = this.squares[fromSquare.row][fromSquare.col];
+            var square = this.squares[fromSquare.row][fromSquare.col];
+            var destSquare = this.squares[toSquare.row][toSquare.col];
 
-            if(piece != null)
+            if(square != null && square != undefined && destSquare != null && destSquare != undefined)
             {
-                piece.wasMoved = true;
-                this.squares[toSquare.row][toSquare.col] = piece;
+                var piece = square.piece;
+
+                if(piece != null)
+                {
+                    square.piece = null;
+                    piece.wasMoved = true;
+                    destSquare.piece = piece;
+                    
+                    this.isWhiteTurn = !this.isWhiteTurn;
+                }
+
             }
+
         }
 
         this.isValidMove = function(from, to)
@@ -74,12 +86,22 @@
             
             if(pieceOrig == null)
                 return false;
+            
+            if(pieceOrig.piece == null)
+                return false;
+
+            //we cant move if is not our turn
+            if(pieceOrig.piece != null && pieceOrig.piece.isWhite != this.isWhiteTurn)
+                return false;
+                
+            //we cant take a piece of the same colour
+            if(pieceDest.piece != null && pieceDest.piece.isWhite == pieceOrig.piece.isWhite)
+                return false;
                 
             var dataOrig = new DataSquare(fromSquare.col, fromSquare.row, pieceOrig ? pieceOrig.piece : null);
             var dataDest = new DataSquare(toSquare.col, toSquare.row,pieceDest ? pieceDest.piece: null);
             
             var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
-
 
             return validMove;
         }
