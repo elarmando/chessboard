@@ -1,200 +1,243 @@
 
-    function ChessBoard()
-    {
-        this.isWhiteTurn = true;
+function ChessBoard() {
+    var self = this;
+    var MAX_COL = 7;
+    var MAX_ROW = 7;
+    
+    this.isWhiteTurn = true;
+    this.squares = [];
+
+
+
+    this._init = function () {
+        this._createBoard();
+    }
+
+    this._createBoard = function () {
         this.squares = [];
-        
-        this._init = function()
-        {
-            this._createBoard();
-        }
 
-        this._createBoard = function()
-        {
-            this.squares = [];
-            
-            for(var i = 0; i < 8; i++)
-            {
-                var row = [];
-                this.squares.push(row);
-                
-                for(var j = 0; j < 8; j++)
-                {
-                    row.push(new Square());
-                }
+        for (var i = 0; i < 8; i++) {
+            var row = [];
+            this.squares.push(row);
+
+            for (var j = 0; j < 8; j++) {
+                row.push(new Square());
             }
         }
-        
-        this.addPiece = function(squareStrings, piece)
-        {
-            var square = convertSquareString(squareStrings);
+    }
 
-            var row =  square.row;
-            var col = square.col;
-            
-           if(row > 8 || row < 0) 
-                return;
+    this.addPiece = function (squareStrings, piece) {
+        var square = convertSquareString(squareStrings);
 
-            if(col > 8 || col < 0)
-                return; 
-            
-            var square = this.squares[row][col];
+        var row = square.row;
+        var col = square.col;
 
-            if(piece)
-            {
-                square.piece = piece;
-                piece.col = col;
-                piece.row  = row;
-            }
-                
-        }          
+        if (row > 8 || row < 0)
+            return;
 
-        this.getPiece = function(row, col)
-        {
-            if(typeof row == "string")
-            {
-                var square = convertSquareString(row);
+        if (col > 8 || col < 0)
+            return;
 
-                if(square)
-                {
-                    row = square.row;
-                    col = square.col;
-                }
-            }
-            
-            var piece = this.squares[row][col];
-            piece = (piece == undefined)? null: piece.piece;
-            
-            return piece;
+        var square = this.squares[row][col];
+
+        if (piece) {
+            square.piece = piece;
+            piece.col = col;
+            piece.row = row;
         }
 
-        this.getSquare = function(row, col)
-        {
-            if(!this.squares[row][col])
-                return null;
-            
-            var piece = this.squares[row][col].piece;
-           var dataSquare = new DataSquare(col, row, piece);
-            
-            return dataSquare;
+    }
+
+    this.getPiece = function (row, col) {
+        if (typeof row == "string") {
+            var square = convertSquareString(row);
+
+            if (square) {
+                row = square.row;
+                col = square.col;
+            }
         }
-        
-        this.move = function(from, to)
-        {
-            var fromSquare = convertSquareString(from);
-            var toSquare = convertSquareString(to);
-            
-            if(fromSquare == null && toSquare != null)
-                return;
 
-            var square = this.squares[fromSquare.row][fromSquare.col];
-            var destSquare = this.squares[toSquare.row][toSquare.col];
+        var piece = this.squares[row][col];
+        piece = (piece == undefined) ? null : piece.piece;
 
-            if(square != null && square != undefined && destSquare != null && destSquare != undefined)
-            {
+        return piece;
+    }
+
+    this.getSquare = function (row, col) {
+        if (!this.squares[row])
+            return;
+
+        if (!this.squares[row][col])
+            return null;
+
+        var piece = this.squares[row][col].piece;
+        var dataSquare = new DataSquare(col, row, piece);
+
+        return dataSquare;
+    }
+
+    this.move = function (from, to) {
+        var fromSquare = convertSquareString(from);
+        var toSquare = convertSquareString(to);
+
+        if (fromSquare == null && toSquare != null)
+            return;
+
+        var square = this.squares[fromSquare.row][fromSquare.col];
+        var destSquare = this.squares[toSquare.row][toSquare.col];
+
+        if (square != null && square != undefined && destSquare != null && destSquare != undefined) {
+            var piece = square.piece;
+
+            if (piece != null) {
+                square.piece = null;
+                piece.wasMoved = true;
+                destSquare.piece = piece;
+
+                piece.col = toSquare.col;
+                piece.row = toSquare.row;
+
+                this.isWhiteTurn = !this.isWhiteTurn;
+            }
+
+        }
+
+    }
+
+    this.isValidMove = function (from, to) {
+        var fromSquare = convertSquareString(from);
+        var toSquare = convertSquareString(to);
+
+        if (fromSquare == null)
+            return false;
+
+
+        var pieceOrig = this.squares[fromSquare.row][fromSquare.col];
+        var pieceDest = this.squares[toSquare.row][toSquare.col];
+
+        if (pieceOrig == null)
+            return false;
+
+        if (pieceOrig.piece == null)
+            return false;
+
+        //we cant move if is not our turn
+        if (pieceOrig.piece != null && pieceOrig.piece.isWhite != this.isWhiteTurn)
+            return false;
+
+        //we cant take a piece of the same colour
+        if (pieceDest.piece != null && pieceDest.piece.isWhite == pieceOrig.piece.isWhite)
+            return false;
+
+        var dataOrig = new DataSquare(fromSquare.col, fromSquare.row, pieceOrig ? pieceOrig.piece : null);
+        var dataDest = new DataSquare(toSquare.col, toSquare.row, pieceDest ? pieceDest.piece : null);
+
+        var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
+
+        return validMove;
+    }
+
+    this.forEachPiece = function (callback) {
+        if (!(callback instanceof Function))
+            return;
+
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+                var square = this.getSquare(i, j);
                 var piece = square.piece;
 
-                if(piece != null)
-                {
-                    square.piece = null;
-                    piece.wasMoved = true;
-                    destSquare.piece = piece;
-
-                    piece.col = toSquare.col;
-                    piece.row = toSquare.row;
-                    
-                    this.isWhiteTurn = !this.isWhiteTurn;
-                }
-
+                if (piece != null)
+                    callback(piece);
             }
-
         }
 
-        this.isValidMove = function(from, to)
-        {
-            var fromSquare = convertSquareString(from);
-            var toSquare = convertSquareString(to);
-            
-            if(fromSquare == null)
-                return false;
-            
 
-            var pieceOrig = this.squares[fromSquare.row][fromSquare.col];
-            var pieceDest = this.squares[toSquare.row][toSquare.col];
-            
-            if(pieceOrig == null)
-                return false;
-            
-            if(pieceOrig.piece == null)
-                return false;
+    }
 
-            //we cant move if is not our turn
-            if(pieceOrig.piece != null && pieceOrig.piece.isWhite != this.isWhiteTurn)
-                return false;
-                
-            //we cant take a piece of the same colour
-            if(pieceDest.piece != null && pieceDest.piece.isWhite == pieceOrig.piece.isWhite)
-                return false;
-                
-            var dataOrig = new DataSquare(fromSquare.col, fromSquare.row, pieceOrig ? pieceOrig.piece : null);
-            var dataDest = new DataSquare(toSquare.col, toSquare.row,pieceDest ? pieceDest.piece: null);
-            
-            var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
+    this.getSquaresAttackedBy = function (attackedByWhite) {
+        attackedByWhite = attackedByWhite === undefined ? true : attackedByWhite;
+        var squares = [];
+        
+        this.forEachPiece( piece =>{
 
-            return validMove;
-        }
-
-        this.convertPositionToString = function(col, row)
-        {
-             var cols = {0 :'a',1 : 'b',2: 'c', 3: 'd', 4 : 'e',5: 'f',6 :  'g', 7: 'h'
-            };
-            
-            var rows = { 7: '8', 6: '7', 5: '6', 4:'5',3:'4',2:'3', 1:'2', 0:'1'
-            }
-            
-            var res = null;
-
-            if(cols[col] != undefined && rows[row] != undefined)
+            if(piece.isWhite == attackedByWhite)
             {
-                res  = cols[col] + rows[row];
+                var sqs = piece.getAttackedSquares(self);
+                sqs.forEach(e =>{ squares.push(e)});
             }
-            
-            return res;
+        });
+
+        return squares;
+    }
+    
+    this.convertPositionToString = function (col, row) {
+        var cols = {
+            0: 'a', 1: 'b', 2: 'c', 3: 'd', 4: 'e', 5: 'f', 6: 'g', 7: 'h'
+        };
+
+        var rows = {
+            7: '8', 6: '7', 5: '6', 4: '5', 3: '4', 2: '3', 1: '2', 0: '1'
         }
-        
-        var convertSquareString = function(square)
-        {
-            var cols = {'a': 0,'b':1, 'c':2, 'd':3, 'e':4, 'f':5, 'g':6, 'h':7
-            };
-            
-            var rows = { '8': 7, '7': 6, '6': 5, '5':4,'4':3,'3':2, '2':1, '1':0
-            }
 
-            if(square.length != 2)
-                return null;
-            
-            var col = cols[square.charAt(0)];
-            var row = rows[square.charAt(1)];
+        var res = null;
 
-            if(col == undefined || row == undefined)
-                return null;
-
-            return {col : col, row : row};
+        if (cols[col] != undefined && rows[row] != undefined) {
+            res = cols[col] + rows[row];
         }
-        
-        this._init();
+
+        return res;
     }
-    
-    function DataSquare(col, row, piece)
+
+    this.getMaxCol = function()
     {
-        this.col = col;
-        this.row = row;
-        this.piece = piece;
+        return MAX_COL;
     }
-    
-    function Square()
+
+    this.getMaxRow = function()
     {
-        this.piece = null;
+        return MAX_ROW;
     }
-    
- 
+
+    var convertSquareString = function (square) {
+        var cols = {
+            'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7
+        };
+
+        var rows = {
+            '8': 7, '7': 6, '6': 5, '5': 4, '4': 3, '3': 2, '2': 1, '1': 0
+        }
+
+        if (square.length != 2)
+            return null;
+
+        var col = cols[square.charAt(0)];
+        var row = rows[square.charAt(1)];
+
+        if (col == undefined || row == undefined)
+            return null;
+
+        return { col: col, row: row };
+    }
+
+    this._init();
+}
+
+function DataSquare(col, row, piece) {
+    this.col = col;
+    this.row = row;
+    this.piece = piece;
+
+    this.isEqual = function(square)
+    {
+        if(!(square instanceof DataSquare))
+            return false;
+
+        return square.col == this.col && square.row == this.row;
+    }
+}
+
+function Square() {
+    this.piece = null;
+}
+

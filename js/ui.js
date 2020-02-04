@@ -139,7 +139,7 @@ function ChessboardIU(selector, chessboard)
         
         if(piece != null)
         {
-            var squares = piece.getAttackedSquares(self.chessboard);
+            var squares = piece.getPossibleMoves(self.chessboard);
             
             self._drawAttacked(squares);
         }

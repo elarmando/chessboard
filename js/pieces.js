@@ -8,10 +8,13 @@ function Piece(iswhite) {
     this.isValidMove = function (origRow, origCol, destRow, destCol) {
         return true;
     }
-    
-    this.getAttackedSquares = function()
-    {
-    
+
+    this.getAttackedSquares = function (chessboard) {
+
+        return [];
+    }
+
+    this.getPossibleMoves = function (chessboard) {
         return [];
     }
 }
@@ -21,35 +24,44 @@ function Pawn(isWhite) {
     Piece.call(this, isWhite);
     this.direction = (isWhite) ? 1 : -1;
     this.className = (isWhite) ? PIECES.L_PAWN : PIECES.D_PAWN;
-    
-    this.getAttackedSquares = function(chessboard)
-    {
-        var squares = [];
-        
-        if(this.col != undefined && this.row != undefined)
-        {
-            squares.push(chessboard.getSquare(this.row + this.direction*1, this.col + 1));
-            squares.push(chessboard.getSquare(this.row + this.direction*1, this.col - 1));
-        }
-        
-        var filteredSquares = [];
 
-        squares.forEach(function(s){
-            //if the square is empty or the destionation piece is other color
-            
-            if(s != null)
-            {
-                
-                if(!s.piece || s.piece.isWhite != this.isWhite)
-                {
-                    filteredSquares.push(s);
-                }
-            }
-            
+    this.getAttackedSquares = function (chessboard) {
+        var squares = [];
+
+        if (this.col != undefined && this.row != undefined) {
+            squares.push(chessboard.getSquare(this.row + this.direction * 1, this.col + 1));
+            squares.push(chessboard.getSquare(this.row + this.direction * 1, this.col - 1));
+        }
+
+        return squares;
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+
+        var possible = [];
+        var attacked = this.getAttackedSquares(chessboard);
+
+        //attacked squares are possible if there is a different color piece
+        attacked.forEach(e => {
+
+            if (e.piece != null && e.piece.isWhite != self.isWhite)
+                possible.push(e);
         });
 
-        
-        return filteredSquares;
+
+        var nextSquare2 = chessboard.getSquare(this.row + 2, this.col);
+        var nextSquare = chessboard.getSquare(this.row + 1, this.col);
+
+
+        if (nextSquare.piece == null) {
+            possible.push(nextSquare);
+
+            if (!this.wasMoved && nextSquare2 != null && nextSquare2.piece == null) {
+                possible.push(nextSquare2);
+            }
+        }
+
+        return possible;
     }
 
     this.isValidMove = function (dataSquareOrig, dataSquareDest, chessboard) {
@@ -102,11 +114,11 @@ function Pawn(isWhite) {
 }
 
 function King(isWhite) {
+    var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;
 
-    this.isValidMove = function (squareOrig, squareDest, chessboard) 
-    {
+    this.isValidMove = function (squareOrig, squareDest, chessboard) {
         var origRow = squareOrig.row;
         var origCol = squareOrig.col;
         var destCol = squareDest.col;
@@ -119,89 +131,249 @@ function King(isWhite) {
         return false;
     }
 
+    this.getAttackedSquares = function (chessboard) {
+        var attacked = [];
+
+        attacked.push(chessboard.getSquare(this.row, this.col + 1));
+        attacked.push(chessboard.getSquare(this.row, this.col - 1));
+
+        attacked.push(chessboard.getSquare(this.row + 1, this.col));
+        attacked.push(chessboard.getSquare(this.row + 1, this.col + 1));
+        attacked.push(chessboard.getSquare(this.row + 1, this.col - 1));
+
+        attacked.push(chessboard.getSquare(this.row - 1, this.col));
+        attacked.push(chessboard.getSquare(this.row - 1, this.col + 1));
+        attacked.push(chessboard.getSquare(this.row - 1, this.col - 1));
+
+        var filtered = [];
+
+        attacked.forEach(e => {
+            if (e != null && e != undefined)
+                filtered.push(e);
+        });
+
+        return filtered;
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+        var attacked = this.getAttackedSquares(chessboard);
+
+        debugger;
+
+        var filtered = [];
+        var attackedByEnemy = chessboard.getSquaresAttackedBy(!this.isWhite);
+
+        attacked.forEach(function (e) {
+
+            var sameColorPiece = (e.piece && e.piece.isWhite == self.isWhite);
+
+            if (e != null && !sameColorPiece) {
+                var isSquareAttacked = false;
+
+                for (var i = 0; i < attackedByEnemy.length && isSquareAttacked == false; i++) {
+                    var squaredAttacked = attackedByEnemy[i];
+
+                    if (e.isEqual(squaredAttacked))
+                        isSquareAttacked = true;
+                }
+
+                if (!isSquareAttacked)
+                    filtered.push(e);
+            }
+        });
+
+        return filtered;
+    }
+
 }
 
 function Queen(isWhite) {
+    var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
 
 
-    this.isValidMove = function(squareOrig, squareDest, chessboard)
-    {
-       var origRow = squareOrig.row;
-       var origCol = squareOrig.col;
-       var destCol = squareDest.col;
-       var destRow = squareDest.row;
+    this.isValidMove = function (squareOrig, squareDest, chessboard) {
+        var origRow = squareOrig.row;
+        var origCol = squareOrig.col;
+        var destCol = squareDest.col;
+        var destRow = squareDest.row;
 
-       if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
+        if (Math.abs(origRow - destRow) == Math.abs(origCol - destCol))
             return true;
-        
-        if(Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
+
+        if (Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
             return true;
-            
-        if(Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
+
+        if (Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
             return true;
 
         return false;
+    }
+
+
+    this.getAttackedSquares = function (chessboard) {
+        var squares = [];
+        var maxRow = chessboard.getMaxRow();
+        var maxCol = chessboard.getMaxCol();
+
+        var limit = false;
+
+        for (var rowi = this.row + 1; rowi <= maxRow && limit == false; rowi++) {
+            limit = addSquare(rowi, this.col, chessboard, squares);
+        }
+        
+        limit = false;
+        
+        for(var rowi = this.row - 1; rowi >= 0 && limit == false; rowi--)
+        {
+            limit = addSquare(rowi, this.col, chessboard, squares);
+        }
+        
+        limit = false;
+
+
+        for(var coli = this.col + 1; coli <= maxCol && limit == false; coli++ )
+        {
+            limit = addSquare(this.row, coli, chessboard, squares);
+        }
+        
+        limit = false;
+
+        for(var coli = this.col -1; coli >= 0 && limit == false; coli--)
+        {
+            limit = addSquare(this.row, coli, chessboard, squares);
+        }
+
+
+        limit = false;
+
+        var coli = this.col - 1, rowi = this.row - 1;
+
+        while(coli >= 0 && rowi >= 0 && limit == false)
+        {
+            limit = addSquare(rowi, coli, chessboard, squares);
+            coli--;
+            rowi--;
+        }
+
+        limit = false;
+        coli = this.col + 1, rowi = this.row -1;
+
+        while(coli <= maxCol && rowi >= 0 && limit == false)
+        {
+        
+            limit = addSquare(rowi, coli, chessboard, squares);
+            coli++;
+            rowi--;
+        }
+
+        limit = false;
+
+        coli = this.col + 1;
+        rowi = this.row + 1;
+
+        while(coli <= maxCol && rowi <= maxRow && limit == false)
+        {
+            limit = addSquare(rowi, coli, chessboard, squares);
+            coli++;
+            rowi++;
+        }
+
+        limit = false;
+
+        coli = this.col -1;
+        rowi = this.row + 1;
+
+        while(coli >= 0 && rowi <= maxRow && limit == false)
+        {
+            limit = addSquare(rowi, coli, chessboard, squares);
+            coli--;
+            rowi++;
+        }
+
+
+
+        return squares;
+    }
+
+    var addSquare = function (row, col, chessboard, squares) {
+        var limit = false;
+
+        var square = chessboard.getSquare(row, col);
+
+        if (square.piece) {
+            limit = true;
+
+            if (square.piece.isWhite != self.isWhite)
+                squares.push(square);
+        }
+        else {
+            squares.push(square);
+        }
+
+        return limit; 
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+        var attacked = this.getAttackedSquares(chessboard);
+        return attacked;
     }
 }
 
 function Bishop(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;
-    
-    this.isValidMove = function(squareOrig, squareDest, chessboard)
-    {
+
+    this.isValidMove = function (squareOrig, squareDest, chessboard) {
         var origRow = squareOrig.row;
         var destRow = squareDest.row;
         var origCol = squareOrig.col;
         var destCol = squareDest.col;
-        
-        if(Math.abs(origRow - destRow)  == Math.abs(origCol - destCol))
-             return true;
-              
+
+        if (Math.abs(origRow - destRow) == Math.abs(origCol - destCol))
+            return true;
+
         return false;
     }
 }
 function Knight(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
-    
-    this.isValidMove = function(squareOrig, squareDest, chessboard)
-    {
+
+    this.isValidMove = function (squareOrig, squareDest, chessboard) {
         var origRow = squareOrig.row;
         var destRow = squareDest.row;
         var origCol = squareOrig.col;
         var destCol = squareDest.col;
 
-         if(Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
+        if (Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
             return true;
 
-        if(Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol) == 1)
+        if (Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol) == 1)
             return true;
 
         return false;
     }
-   
+
 }
 
 function Rook(isWhite) {
     Piece.call(isWhite);
     this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
 
-    this.isValidMove = function(squareOrig, squareDest, chessboard)
-    {
+    this.isValidMove = function (squareOrig, squareDest, chessboard) {
         var origRow = squareOrig.row;
         var destRow = squareDest.row;
         var origCol = squareOrig.col;
         var destCol = squareDest.col;
 
-        if(Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
+        if (Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
             return true;
-        
-        if(Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
+
+        if (Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
             return true;
-        
+
         return false;
     }
 }
