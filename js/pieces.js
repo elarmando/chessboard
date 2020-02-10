@@ -33,7 +33,14 @@ function Pawn(isWhite) {
             squares.push(chessboard.getSquare(this.row + this.direction * 1, this.col - 1));
         }
 
-        return squares;
+        var filtered = [];
+
+        squares.forEach(function(e){
+            if(e)
+                filtered.push(e);
+        })
+
+        return filtered;
     }
 
     this.getPossibleMoves = function (chessboard) {
@@ -49,8 +56,8 @@ function Pawn(isWhite) {
         });
 
 
-        var nextSquare2 = chessboard.getSquare(this.row + 2, this.col);
-        var nextSquare = chessboard.getSquare(this.row + 1, this.col);
+        var nextSquare2 = chessboard.getSquare(this.row + (this.direction * 2), this.col);
+        var nextSquare = chessboard.getSquare(this.row + (this.direction * 1), this.col);
 
 
         if (nextSquare.piece == null) {
@@ -322,6 +329,7 @@ function Queen(isWhite) {
 }
 
 function Bishop(isWhite) {
+    var self  = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;
 
@@ -336,8 +344,85 @@ function Bishop(isWhite) {
 
         return false;
     }
+
+
+    this.getAttackedSquares = function (chessboard) {
+        var icol = this.col + 1;
+        var irow = this.row + 1;
+        var mrow = chessboard.getMaxCol();
+        var mcol = chessboard.getMaxRow();
+        var limit = false;
+        var squares = [];
+        
+        while(icol < mcol && irow < mrow && limit == false)
+        {
+            limit = addSquare(irow, icol, chessboard, squares);
+
+            irow++;
+            icol++;
+        }
+        
+        limit = false;
+        icol = this.col - 1;
+        irow = this.row + 1;
+
+        while(icol >= 0 && irow < mrow && limit == false)
+        {
+            limit = addSquare(irow, icol, chessboard, squares);
+            icol--;
+            irow++;
+        }
+        
+        limit = false;
+        icol = this.col - 1;
+        irow = this.row - 1;
+        
+        while(icol >= 0 && irow >= 0 && limit == false)
+        {
+            limit = addSquare(irow, icol, chessboard, squares);
+            icol--;
+            irow--;
+        }
+        
+        limit = false;
+        icol = this.col + 1;
+        irow = this.row -1;
+
+        while(icol < mcol && irow >= 0 && limit == false)
+        {
+            limit = addSquare(irow, icol, chessboard, squares);
+
+            icol++;
+            irow--;
+        }
+        
+        return squares;
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+        return this.getAttackedSquares(chessboard);
+    }
+
+    var addSquare = function (row, col, chessboard, squares) {
+        var limit = false;
+
+        var square = chessboard.getSquare(row, col);
+
+        if (square.piece) {
+            limit = true;
+
+            if (square.piece.isWhite != self.isWhite)
+                squares.push(square);
+        }
+        else {
+            squares.push(square);
+        }
+
+        return limit; 
+    }
 }
 function Knight(isWhite) {
+    var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
 
@@ -356,10 +441,51 @@ function Knight(isWhite) {
         return false;
     }
 
+    this.getAttackedSquares = function (chessboard) {
+
+        var squares = [];
+
+        squares.push(chessboard.getSquare(this.row + 2, this.col - 1));
+        squares.push(chessboard.getSquare(this.row + 2, this.col + 1));
+        
+        squares.push(chessboard.getSquare(this.row + 1, this.col + 2));
+        squares.push(chessboard.getSquare(this.row + 1, this.col - 2));
+        
+        squares.push(chessboard.getSquare(this.row - 1, this.col + 2));
+        squares.push(chessboard.getSquare(this.row - 1, this.col - 2));
+        
+        squares.push(chessboard.getSquare(this.row - 2, this.col + 1));
+        squares.push(chessboard.getSquare(this.row - 2, this.col - 1));
+
+        var filtered = [];
+
+        squares.forEach(function(e){
+           if(e)
+           {
+               if(e.piece)
+               {
+                    if(e.piece.isWhite != self.isWhite)
+                        filtered.push(e);
+               }
+               else
+               {
+                    filtered.push(e); 
+               }
+           }
+           
+        });
+        return filtered;
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+        return this.getAttackedSquares(chessboard);
+    }
+
 }
 
 function Rook(isWhite) {
-    Piece.call(isWhite);
+    var self = this;
+    Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
 
     this.isValidMove = function (squareOrig, squareDest, chessboard) {
@@ -375,6 +501,63 @@ function Rook(isWhite) {
             return true;
 
         return false;
+    }
+
+    this.getAttackedSquares = function (chessboard) {
+        var squares = [];
+        var maxc = chessboard.getMaxRow();
+        var maxr = chessboard.getMaxCol();
+        var limit = false;
+
+        for(var icol = this.col + 1; icol < maxc && limit == false; icol++ )
+        {
+            limit = addSquare(this.row, icol, chessboard, squares);            
+        }
+        
+        limit = false;
+
+        for(var icol = this.col - 1; icol >= 0 &&  limit == false; icol--)
+        {
+            limit = addSquare(this.row, icol, chessboard, squares);
+        }
+        
+        limit = false;
+
+        for(var irow = this.row + 1; irow < maxr && limit == false; irow++)
+        {
+            limit = addSquare(irow, this.col, chessboard, squares);
+        }
+        
+        limit = false;
+
+        for(var irow = this.row - 1; irow >= 0 && limit == false; irow--)
+        {
+            limit = addSquare(irow, this.col, chessboard, squares);
+        }
+
+        return squares;
+    }
+
+    this.getPossibleMoves = function (chessboard) {
+        return this.getAttackedSquares(chessboard);
+    }
+
+    var addSquare = function (row, col, chessboard, squares) {
+        var limit = false;
+
+        var square = chessboard.getSquare(row, col);
+
+        if (square.piece) {
+            limit = true;
+
+            if (square.piece.isWhite != self.isWhite)
+                squares.push(square);
+        }
+        else {
+            squares.push(square);
+        }
+
+        return limit; 
     }
 }
 
