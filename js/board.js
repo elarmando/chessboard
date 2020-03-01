@@ -44,6 +44,7 @@ function ChessBoard() {
             square.piece = piece;
             piece.col = col;
             piece.row = row;
+            piece.chessboard =  this;
         }
 
     }
