@@ -4,21 +4,6 @@ function Rook(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
 
-    this.isValidMove = function (squareOrig, squareDest) {
-        var origRow = squareOrig.row;
-        var destRow = squareDest.row;
-        var origCol = squareOrig.col;
-        var destCol = squareDest.col;
-
-        if (Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
-            return true;
-
-        if (Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
-            return true;
-
-        return false;
-    }
-
     this.getAttackedSquares = function () {
         var squares = [];
         var chessboard = this.chessboard;
@@ -60,7 +45,7 @@ function Rook(isWhite) {
     }
 
     var addSquare = function (row, col, squares) {
-        var chessboard =  this.chessboard;
+        var chessboard =  self.chessboard;
         var limit = false;
 
         var square = chessboard.getSquare(row, col);

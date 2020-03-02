@@ -4,21 +4,6 @@ function Knight(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
 
-    this.isValidMove = function (squareOrig, squareDest) {
-        var origRow = squareOrig.row;
-        var destRow = squareDest.row;
-        var origCol = squareOrig.col;
-        var destCol = squareDest.col;
-
-        if (Math.abs(origCol - destCol) == 2 && Math.abs(origRow - destRow) == 1)
-            return true;
-
-        if (Math.abs(origRow - destRow) == 2 && Math.abs(origCol - destCol) == 1)
-            return true;
-
-        return false;
-    }
-
     this.getAttackedSquares = function () {
         var chessboard = this.chessboard;
 

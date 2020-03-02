@@ -226,10 +226,8 @@ function DraggPieces(container)
     
     this._mouseMove = function(e)
     {
-        
         if(!isMouseDown)
         {
-           
             return;
         }
 
@@ -241,16 +239,11 @@ function DraggPieces(container)
         var newX = rect.x + deltaX;
         var newY = rect.y + deltaY;
 
-        console.log("X:" + newX + ", Y:" + newY);
-
         draggingElement.style.top = newY + "px";
         draggingElement.style.left = newX + "px";
-        
 
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
-            
     }
     
     this._mouseUp = function(e)

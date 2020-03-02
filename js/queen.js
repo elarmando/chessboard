@@ -4,26 +4,6 @@ function Queen(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
 
-
-    this.isValidMove = function (squareOrig, squareDest) {
-        var origRow = squareOrig.row;
-        var origCol = squareOrig.col;
-        var destCol = squareDest.col;
-        var destRow = squareDest.row;
-
-        if (Math.abs(origRow - destRow) == Math.abs(origCol - destCol))
-            return true;
-
-        if (Math.abs(origRow - destRow) > 0 && Math.abs(origCol - destCol) == 0)
-            return true;
-
-        if (Math.abs(origCol - destCol) > 0 && Math.abs(origRow - destRow) == 0)
-            return true;
-
-        return false;
-    }
-
-
     this.getAttackedSquares = function () {
         var chessboard = this.chessboard;
         var squares = [];

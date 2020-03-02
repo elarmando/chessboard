@@ -4,19 +4,6 @@ function Bishop(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;
 
-    this.isValidMove = function (squareOrig, squareDest) {
-        var origRow = squareOrig.row;
-        var destRow = squareDest.row;
-        var origCol = squareOrig.col;
-        var destCol = squareDest.col;
-
-        if (Math.abs(origRow - destRow) == Math.abs(origCol - destCol))
-            return true;
-
-        return false;
-    }
-
-
     this.getAttackedSquares = function () {
         var chessboard = this.chessboard;
         var icol = this.col + 1;

@@ -3,19 +3,6 @@ function King(isWhite) {
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;
 
-    this.isValidMove = function (squareOrig, squareDest) {
-        var origRow = squareOrig.row;
-        var origCol = squareOrig.col;
-        var destCol = squareDest.col;
-        var destRow = squareDest.row;
-
-        if ((Math.abs(origRow - destRow) <= 1) && (Math.abs(origCol - destCol) <= 1)) {
-            return true;
-        }
-
-        return false;
-    }
-
     this.getAttackedSquares = function () {
         var chessboard = this.chessboard;
         var attacked = [];

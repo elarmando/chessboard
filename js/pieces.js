@@ -6,8 +6,21 @@ function Piece(iswhite) {
     this.row = undefined;
     this.col = undefined;
 
-    this.isValidMove = function (origRow, origCol, destRow, destCol) {
-        return true;
+    this.isValidMove = function (origSquare, destSquare) {
+        var moves = this.getPossibleMoves();
+        var found = false;
+        var destRow = destSquare.row;
+        var destCol = destSquare.col;
+        
+        for(var i = 0; i < moves.length && !found; i++)
+        {
+            var move = moves[i];
+            
+            if(move.row == destRow && move.col == destCol)
+                found = true;
+        }
+
+        return found;
     }
 
     this.getAttackedSquares = function (chessboard) {
