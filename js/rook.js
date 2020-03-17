@@ -13,28 +13,28 @@ function Rook(isWhite) {
 
         for(var icol = this.col + 1; icol < maxc && limit == false; icol++ )
         {
-            limit = addSquare(this.row, icol, chessboard, squares);            
+            limit = addSquare(this.row, icol, squares);            
         }
         
         limit = false;
 
         for(var icol = this.col - 1; icol >= 0 &&  limit == false; icol--)
         {
-            limit = addSquare(this.row, icol, chessboard, squares);
+            limit = addSquare(this.row, icol,  squares);
         }
         
         limit = false;
 
         for(var irow = this.row + 1; irow < maxr && limit == false; irow++)
         {
-            limit = addSquare(irow, this.col, chessboard, squares);
+            limit = addSquare(irow, this.col,  squares);
         }
         
         limit = false;
 
         for(var irow = this.row - 1; irow >= 0 && limit == false; irow--)
         {
-            limit = addSquare(irow, this.col, chessboard, squares);
+            limit = addSquare(irow, this.col,  squares);
         }
 
         return squares;

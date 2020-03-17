@@ -3,7 +3,7 @@ function ChessBoard() {
     var self = this;
     var MAX_COL = 7;
     var MAX_ROW = 7;
-    
+
     this.isWhiteTurn = true;
     this.squares = [];
 
@@ -44,7 +44,7 @@ function ChessBoard() {
             square.piece = piece;
             piece.col = col;
             piece.row = row;
-            piece.chessboard =  this;
+            piece.chessboard = this;
         }
 
     }
@@ -106,6 +106,66 @@ function ChessBoard() {
 
     }
 
+    this.isCheck = function (isWhite) {
+        var myPieces = this.getPieces(isWhite);
+        var enemyPieces = this.getPieces(!isWhite);
+        var myKing = this._findKing(myPieces);
+        
+        var isCheck = this._isPieceAttackingKing(myKing, enemyPieces);
+        
+        return isCheck;
+    }
+
+    this._isPieceAttackingKing = function (king, pieces) {
+        var isCheck = false;
+
+        for (var i = 0; i < pieces.length && !isCheck; i++) {
+            var squares = pieces[i].getAttackedSquares();
+
+            for (var s = 0; s < squares.length && !isCheck; s++) {
+                var square = squares[s];
+
+                if (square.col == king.col && square.row == king.row)
+                    isCheck = true;
+            }
+       }
+        return isCheck;
+    }
+
+    this._findKing = function (pieces) {
+        var king = null;
+
+        for (var i = 0; i < pieces.length; i++) {
+            if (pieces[i] instanceof King) {
+                king = pieces[i];
+                break;
+            }
+        }
+
+        return king;
+    }
+
+    this.getBlackPieces = function () {
+        return this.getPieces(false);
+    }
+
+    this.getWhitePieces = function () {
+        return this.getPieces(true);
+    }
+
+    this.getPieces = function (isWhite) {
+        var pieces = [];
+
+        this.forEachPiece(function (piece) {
+
+            if (piece.isWhite == isWhite) {
+                pieces.push(piece);
+            }
+        });
+
+        return pieces;
+    }
+
     this.isValidMove = function (from, to) {
         var fromSquare = convertSquareString(from);
         var toSquare = convertSquareString(to);
@@ -131,10 +191,23 @@ function ChessBoard() {
         if (pieceDest.piece != null && pieceDest.piece.isWhite == pieceOrig.piece.isWhite)
             return false;
 
+        var pieceMovedColor = pieceOrig.piece.isWhite;
+
         var dataOrig = new DataSquare(fromSquare.col, fromSquare.row, pieceOrig ? pieceOrig.piece : null);
         var dataDest = new DataSquare(toSquare.col, toSquare.row, pieceDest ? pieceDest.piece : null);
 
         var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
+        
+        if(validMove)
+        {
+            this.move(from, to);
+            
+            if(this.isCheck(pieceMovedColor)) //cant move because is check
+            {
+                validMove = false;
+                this.move(to, from)
+            }
+        }
 
         return validMove;
     }
@@ -159,19 +232,18 @@ function ChessBoard() {
     this.getSquaresAttackedBy = function (attackedByWhite) {
         attackedByWhite = attackedByWhite === undefined ? true : attackedByWhite;
         var squares = [];
-        
-        this.forEachPiece( piece =>{
 
-            if(piece.isWhite == attackedByWhite)
-            {
+        this.forEachPiece(piece => {
+
+            if (piece.isWhite == attackedByWhite) {
                 var sqs = piece.getAttackedSquares(self);
-                sqs.forEach(e =>{ squares.push(e)});
+                sqs.forEach(e => { squares.push(e) });
             }
         });
 
         return squares;
     }
-    
+
     this.convertPositionToString = function (col, row) {
         var cols = {
             0: 'a', 1: 'b', 2: 'c', 3: 'd', 4: 'e', 5: 'f', 6: 'g', 7: 'h'
@@ -190,13 +262,11 @@ function ChessBoard() {
         return res;
     }
 
-    this.getMaxCol = function()
-    {
+    this.getMaxCol = function () {
         return MAX_COL;
     }
 
-    this.getMaxRow = function()
-    {
+    this.getMaxRow = function () {
         return MAX_ROW;
     }
 
@@ -229,9 +299,8 @@ function DataSquare(col, row, piece) {
     this.row = row;
     this.piece = piece;
 
-    this.isEqual = function(square)
-    {
-        if(!(square instanceof DataSquare))
+    this.isEqual = function (square) {
+        if (!(square instanceof DataSquare))
             return false;
 
         return square.col == this.col && square.row == this.row;
