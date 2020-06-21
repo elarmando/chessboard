@@ -6,8 +6,9 @@ function ChessBoard() {
 
     this.isWhiteTurn = true;
     this.squares = [];
+    this.onAfterMove = null;
 
-
+    
 
     this._init = function () {
         this._createBoard();
@@ -79,8 +80,9 @@ function ChessBoard() {
     }
 
     this.move = function (from, to) {
-        var fromSquare = convertSquareString(from);
-        var toSquare = convertSquareString(to);
+
+        var fromSquare =(from instanceof DataSquare)? from : convertSquareString(from);
+        var toSquare = (to instanceof DataSquare)? to: convertSquareString(to);
 
         if (fromSquare == null && toSquare != null)
             return;
@@ -100,6 +102,9 @@ function ChessBoard() {
                 piece.row = toSquare.row;
 
                 this.isWhiteTurn = !this.isWhiteTurn;
+
+                if(self.onAfterMove instanceof Function)
+                    self.onAfterMove();
             }
 
         }

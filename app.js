@@ -10,8 +10,6 @@
         var factory = new PieceFactory();
 
         var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'}
-        
-
 
         for(var i = 0; i < 8; i++)
         {
@@ -49,6 +47,15 @@
 
         ui.draw();
         
+        var computer = new Computer(chessboard);
+        computer.isWhite = false;
+        
+        chessboard.onAfterMove = function()
+        {
+            debugger; 
+            computer.move();
+            ui.draw();
+        }
       
     
     }

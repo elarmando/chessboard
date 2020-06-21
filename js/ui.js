@@ -26,7 +26,7 @@ function ChessboardIU(selector, chessboard)
 
                 if(sq.piece == null)
                 {
-
+                    domSquare.innerHTML = "";
                 }
                 else
                 {

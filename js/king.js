@@ -30,7 +30,7 @@ function King(isWhite) {
 
     this.getPossibleMoves = function () {
         var chessboard = this.chessboard;
-        var attacked = this.getAttackedSquares(chessboard);
+        var attacked = this.getAttackedSquares();
         var filtered = [];
         var attackedByEnemy = chessboard.getSquaresAttackedBy(!this.isWhite);
 
