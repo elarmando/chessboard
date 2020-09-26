@@ -52,12 +52,9 @@
         
         chessboard.onAfterMove = function()
         {
-            debugger; 
             computer.move();
             ui.draw();
         }
-      
-    
     }
     
     window.onload  = init;

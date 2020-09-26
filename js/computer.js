@@ -9,15 +9,29 @@ function Computer(chessboard)
         if(!self._isMyTurn())
             return;
 
-        var moves = self._getMoves();
+        var moves = self._getValidMoves();
 
         if(moves.length == 0)
             return;
 
         var index = Math.floor(Math.random() * moves.length);
+        //var index = moves.length - 1;
         var move = moves[index];
 
-        chessboard.move(move.SquareFrom, move.SquareTo);
+        chessboard.move(move.squareFrom, move.squareTo);
+    }
+
+    this._getValidMoves = function()
+    {
+        var moves = this._getMoves();
+        var validMoves = [];
+
+        moves.forEach(e => {
+            if(chessboard.isValidMove(e.squareFrom, e.squareTo))
+                validMoves.push(e);
+        });
+
+        return validMoves;
     }
 
     this._getMoves = function()
@@ -50,6 +64,6 @@ function Computer(chessboard)
 
 function PieceMove(squareFrom, squareTo)
 {
-    this.SquareFrom = squareFrom;
-    this.SquareTo = squareTo;
+    this.squareFrom = squareFrom;
+    this.squareTo = squareTo;
 }

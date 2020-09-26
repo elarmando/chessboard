@@ -79,7 +79,8 @@ function ChessBoard() {
         return dataSquare;
     }
 
-    this.move = function (from, to) {
+    this.move = function (from, to, notifyMove) {
+        notifyMove = notifyMove == undefined? true: false;
 
         var fromSquare =(from instanceof DataSquare)? from : convertSquareString(from);
         var toSquare = (to instanceof DataSquare)? to: convertSquareString(to);
@@ -103,13 +104,15 @@ function ChessBoard() {
 
                 this.isWhiteTurn = !this.isWhiteTurn;
 
-                if(self.onAfterMove instanceof Function)
+                if(self.onAfterMove instanceof Function && notifyMove)
                     self.onAfterMove();
             }
 
         }
 
     }
+
+   
 
     this.isCheck = function (isWhite) {
         var myPieces = this.getPieces(isWhite);
@@ -172,12 +175,22 @@ function ChessBoard() {
     }
 
     this.isValidMove = function (from, to) {
-        var fromSquare = convertSquareString(from);
-        var toSquare = convertSquareString(to);
+        var fromSquare = null;
+        var toSquare = null;
+
+        if(from instanceof DataSquare)
+            fromSquare = { col : from.col, row: from.row };
+        else
+            fromSquare = convertSquareString(from);
+
+        if(to instanceof DataSquare)
+            toSquare = { col: to.col, row: to.row};
+        else
+            toSquare = convertSquareString(to);
+
 
         if (fromSquare == null)
             return false;
-
 
         var pieceOrig = this.squares[fromSquare.row][fromSquare.col];
         var pieceDest = this.squares[toSquare.row][toSquare.col];
@@ -202,16 +215,21 @@ function ChessBoard() {
         var dataDest = new DataSquare(toSquare.col, toSquare.row, pieceDest ? pieceDest.piece : null);
 
         var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
-        
-        if(validMove)
-        {
-            this.move(from, to);
-            
-            if(this.isCheck(pieceMovedColor)) //cant move because is check
+
+        if (validMove) {
+            var backupPiece = pieceDest.piece;
+            this.move(from, to, false);
+
+            if (this.isCheck(pieceMovedColor)) //cant move because is check
             {
                 validMove = false;
-                this.move(to, from)
             }
+
+            this.move(to, from, false);//restore movement
+
+            //this is to recover the piece, if there was any in the "to" square
+            if(backupPiece != null)
+                this.squares[toSquare.row][toSquare.col].piece = backupPiece;
         }
 
         return validMove;
