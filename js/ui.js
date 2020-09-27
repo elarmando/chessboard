@@ -117,6 +117,9 @@ function ChessboardIU(selector, chessboard)
                 square.appendChild(clone);
                     
                 self.chessboard.move(originSquareString, destinySquareString);
+
+                if(self.chessboard.isCheckMate())
+                    window.alert("Check mate");
             }
             else
             {

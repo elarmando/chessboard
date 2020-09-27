@@ -23,6 +23,15 @@ function Piece(iswhite) {
         return found;
     }
 
+    this.isAttackingSquare = function(row, col)
+    {
+        var squares = this.getAttackedSquares();
+        for(var i = 0; i < squares.length; i++)
+            if(squares[i].col == col && squares[i].row == row)
+                return true;
+        return false;
+    }
+
     this.getAttackedSquares = function (chessboard) {
 
         return [];
