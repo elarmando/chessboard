@@ -47,14 +47,14 @@
 
         ui.draw();
         
-       /*  var computer = new Computer(chessboard);
+        var computer = new Computer(chessboard);
         computer.isWhite = false;
         
         chessboard.onAfterMove = function()
         {
             computer.move();
             ui.draw();
-        } */
+        }
     }
     
     window.onload  = init;
