@@ -1,5 +1,7 @@
-() Validate check mate
+(x) Validate check mate
   (x)  0) is check
   (x)  1) king can't scape
   (x)  2) can't capture the atacking piece
-    3) can't place a piece between the atacking piece and the king 
+  (x)  3) can't place a piece between the atacking piece and the king 
+
+()there is a bug when a pawn captures in the second rank

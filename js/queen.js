@@ -108,6 +108,24 @@ function Queen(isWhite) {
         return limit; 
     }
 
+    this.getAttackedSquaresLine = function(targetCol, targetRow)
+    {
+        var moves = this.getPossibleMoves();
+        var line = []
+        for(var i = 0; i < moves.length; i++)
+        {
+            var difrows = Math.abs(moves[i].row - targetRow);
+            var difcols = Math.abs(moves[i].col - targetCol);
+
+            var samediagonal = difrows == difcols;
+            var samecolOrRow =  moves[i].col == targetCol || moves[i].row == targetRow;
+
+            if(samediagonal || samecolOrRow)
+                line.push(moves[i]);
+        }
+        return line;
+    }
+
     this.getPossibleMoves = function () {
         var attacked = this.getAttackedSquares();
         return attacked;
