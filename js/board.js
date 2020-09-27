@@ -161,6 +161,29 @@ function ChessBoard() {
       }
     }
 
+    //3)can't place a piece between the atacking piece and the king
+    for (var i = 0; i < piecesAttackingKing.length; i++) {
+      var attackingLine = piecesAttackingKing[i].getAttackedSquaresLine(king.col, king.row);
+
+      for (var j = 0; j < myPieces.length; j++) {
+        var myPiece = myPieces[j];
+
+        if(!(myPiece instanceof King)) //skip king
+        {
+          for (var k = 0; k < attackingLine.length; k++) {
+            var lineSquare = attackingLine[k];
+            if (myPiece.isPossibleToMoveTo(lineSquare.col, lineSquare.row)) {
+              var from = this.convertPositionToString(myPiece.col, myPiece.row);
+              var col = this.convertPositionToString(lineSquare.col, lineSquare.row);
+  
+              if (this.isValidMove(from, col))
+                return false;
+            }
+          }
+        }
+      }
+    }
+
     return true;
   };
 

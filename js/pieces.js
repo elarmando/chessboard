@@ -40,6 +40,22 @@ function Piece(iswhite) {
     this.getPossibleMoves = function (chessboard) {
         return [];
     }
+
+    this.isPossibleToMoveTo = function(col, row)
+    {
+        var moves = this.getPossibleMoves();
+
+        for(var i = 0; i < moves.length; i++)
+            if(moves[i].col == col && moves[i].row == row)
+                return true;
+
+        return false;
+    }
+
+    this.getAttackedSquaresLine = function(targetCol, targetRow)
+    {
+        return [];
+    }
 }
 
 function PieceFactory() {

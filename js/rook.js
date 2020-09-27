@@ -11,7 +11,7 @@ function Rook(isWhite) {
         var maxr = chessboard.getMaxCol();
         var limit = false;
 
-        for(var icol = this.col + 1; icol < maxc && limit == false; icol++ )
+        for(var icol = this.col + 1; icol <= maxc && limit == false; icol++ )
         {
             limit = addSquare(this.row, icol, squares);            
         }
@@ -25,7 +25,7 @@ function Rook(isWhite) {
         
         limit = false;
 
-        for(var irow = this.row + 1; irow < maxr && limit == false; irow++)
+        for(var irow = this.row + 1; irow <= maxr && limit == false; irow++)
         {
             limit = addSquare(irow, this.col,  squares);
         }
@@ -42,6 +42,20 @@ function Rook(isWhite) {
 
     this.getPossibleMoves = function () {
         return this.getAttackedSquares();
+    }
+
+    this.getAttackedSquaresLine = function(targetCol, targetRow)
+    {
+        var squares = [];
+        var moves = this.getPossibleMoves();
+
+        for(var i = 0; i < moves.length; i++)
+        {
+            if(moves[i].col == targetCol || moves[i].row == targetRow)
+                squares.push(moves[i]);
+        }
+
+        return squares;
     }
 
     var addSquare = function (row, col, squares) {

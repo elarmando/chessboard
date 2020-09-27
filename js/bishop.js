@@ -13,7 +13,7 @@ function Bishop(isWhite) {
         var limit = false;
         var squares = [];
         
-        while(icol < mcol && irow < mrow && limit == false)
+        while(icol <= mcol && irow <= mrow && limit == false)
         {
             limit = addSquare(irow, icol, chessboard, squares);
 
@@ -25,7 +25,7 @@ function Bishop(isWhite) {
         icol = this.col - 1;
         irow = this.row + 1;
 
-        while(icol >= 0 && irow < mrow && limit == false)
+        while(icol >= 0 && irow <= mrow && limit == false)
         {
             limit = addSquare(irow, icol, chessboard, squares);
             icol--;
@@ -47,7 +47,7 @@ function Bishop(isWhite) {
         icol = this.col + 1;
         irow = this.row -1;
 
-        while(icol < mcol && irow >= 0 && limit == false)
+        while(icol <= mcol && irow >= 0 && limit == false)
         {
             limit = addSquare(irow, icol, chessboard, squares);
 
@@ -60,6 +60,26 @@ function Bishop(isWhite) {
 
     this.getPossibleMoves = function () {
         return this.getAttackedSquares();
+    }
+
+  
+    
+    this.getAttackedSquaresLine = function(targetCol, targetRow)
+    {
+        //This function returns all the squares attacked that are aligned with the target square (they are in the same bishop diagonal) 
+        var line = [];
+        var moves = this.getPossibleMoves();
+
+        for(var i = 0; i < moves.length; i++)
+        {
+            var difrows = Math.abs(moves[i].row - targetRow);
+            var difcols = Math.abs(moves[i].col - targetCol);
+
+            if(difrows == difcols)//if number of cols and rows are the same, it means they are in the same diagonal
+                line.push(moves[i]);
+        }
+
+        return line;
     }
 
     var addSquare = function (row, col, chessboard, squares) {
