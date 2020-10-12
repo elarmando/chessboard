@@ -92,7 +92,40 @@ function ChessBoard() {
     if (square.piece == null || square.piece == undefined)
       throw "no piece to move";
 
+    
+
     var piece = square.piece;
+
+   /*  if(piece instanceof King)
+    {
+      if(piece.col + 2 == toSquare.col && piece.row == toSquare.row)
+      {
+        var rookSquare = this.squares[toSquare.row][7];
+
+        if(rookSquare.piece instanceof Rook && rookSquare.piece.isWhite == piece.isWhite)//it is short castle
+        {
+          var destRookSquare = this.squares[toSquare.row][toSquare.col - 1];
+          destRookSquare.piece = rookSquare.piece;
+          destRookSquare.piece.col = destRookSquare.col;
+          destRookSquare.piece.row = destRookSquare.row;
+          rookSquare.piece = null;
+        }
+      }
+      else if(piece.col - 2 == toSquare.col && piece.row == toSquare.col)
+      {
+        var rookSquare = this.squares[toSquare.row][0];
+
+        if(rookSquare.piece instanceof Rook && rookSquare.piece.isWhite == piece.isWhite)
+        {
+          var destRookSquare = this.squares[toSquare.row][toSquare.col + 1];
+          destRookSquare.piece = rookSquare.piece;
+          destRookSquare.piece.col = destRookSquare.col;
+          destRookSquare.piece.row = destRookSquare.row;
+          rookSquare.piece = null;
+        }
+      }
+    } */
+
     square.piece = null;
     piece.wasMoved = true;
     destSquare.piece = piece;
