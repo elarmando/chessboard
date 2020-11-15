@@ -120,6 +120,8 @@ function ChessboardIU(selector, chessboard)
 
                 if(self.chessboard.isCheckMate())
                     window.alert("Check mate");
+
+                self.draw();
             }
             else
             {

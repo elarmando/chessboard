@@ -92,39 +92,7 @@ function ChessBoard() {
     if (square.piece == null || square.piece == undefined)
       throw "no piece to move";
 
-    
-
     var piece = square.piece;
-
-   /*  if(piece instanceof King)
-    {
-      if(piece.col + 2 == toSquare.col && piece.row == toSquare.row)
-      {
-        var rookSquare = this.squares[toSquare.row][7];
-
-        if(rookSquare.piece instanceof Rook && rookSquare.piece.isWhite == piece.isWhite)//it is short castle
-        {
-          var destRookSquare = this.squares[toSquare.row][toSquare.col - 1];
-          destRookSquare.piece = rookSquare.piece;
-          destRookSquare.piece.col = destRookSquare.col;
-          destRookSquare.piece.row = destRookSquare.row;
-          rookSquare.piece = null;
-        }
-      }
-      else if(piece.col - 2 == toSquare.col && piece.row == toSquare.col)
-      {
-        var rookSquare = this.squares[toSquare.row][0];
-
-        if(rookSquare.piece instanceof Rook && rookSquare.piece.isWhite == piece.isWhite)
-        {
-          var destRookSquare = this.squares[toSquare.row][toSquare.col + 1];
-          destRookSquare.piece = rookSquare.piece;
-          destRookSquare.piece.col = destRookSquare.col;
-          destRookSquare.piece.row = destRookSquare.row;
-          rookSquare.piece = null;
-        }
-      }
-    } */
 
     square.piece = null;
     piece.wasMoved = true;
@@ -132,12 +100,39 @@ function ChessBoard() {
 
     piece.col = toSquare.col;
     piece.row = toSquare.row;
-
-    this.isWhiteTurn = !this.isWhiteTurn;
   };
 
   this.move = function (from, to) {
-    this._internalMove(from, to);
+    var fromSquare = from instanceof DataSquare ? from : convertSquareString(from);
+    var toSquare = to instanceof DataSquare ? to : convertSquareString(to);
+
+    if (fromSquare == null && toSquare != null)
+      throw "invalid move";
+
+    if(this._isCastle(fromSquare, toSquare))
+    {
+      //make king move
+      this._internalMove(from, to);
+
+      //make rook move
+      var rookCol = toSquare.col == 6? 7 : 0;
+      var rookDestCol = toSquare.col == 6? 5: 3;
+      var rookSquare = this.getSquare(fromSquare.row, rookCol); 
+      var rookDestSquare = this.getSquare(fromSquare.row, rookDestCol);
+
+      if(rookSquare.piece instanceof Rook)
+      {
+        this._internalMove(rookSquare, rookDestSquare);
+      }
+
+    }
+    else
+    {
+      this._internalMove(from, to);
+    }
+
+    
+    this.isWhiteTurn = !this.isWhiteTurn;
 
     if (self.onAfterMove instanceof Function) self.onAfterMove();
   };
@@ -182,12 +177,11 @@ function ChessBoard() {
       for (var i = 0; i < myPieces.length; i++) {
         var piece = myPieces[i];
 
-        if(piece.isAttackingSquare(attacker.row, attacker.col))
-        {
+        if (piece.isAttackingSquare(attacker.row, attacker.col)) {
           var from = this.convertPositionToString(piece.col, piece.row);
           var to = this.convertPositionToString(attacker.col, attacker.row);
 
-          if(this.isValidMove(from, to))//i can capture. It is not checkmate
+          if (this.isValidMove(from, to))//i can capture. It is not checkmate
             return false;
 
         }
@@ -201,14 +195,14 @@ function ChessBoard() {
       for (var j = 0; j < myPieces.length; j++) {
         var myPiece = myPieces[j];
 
-        if(!(myPiece instanceof King)) //skip king
+        if (!(myPiece instanceof King)) //skip king
         {
           for (var k = 0; k < attackingLine.length; k++) {
             var lineSquare = attackingLine[k];
             if (myPiece.isPossibleToMoveTo(lineSquare.col, lineSquare.row)) {
               var from = this.convertPositionToString(myPiece.col, myPiece.row);
               var col = this.convertPositionToString(lineSquare.col, lineSquare.row);
-  
+
               if (this.isValidMove(from, col))
                 return false;
             }
@@ -278,6 +272,19 @@ function ChessBoard() {
 
     return pieces;
   };
+
+  this._isCastle = function (fromSquare, toSquare) {
+    var squareOrig = this.squares[fromSquare.row][fromSquare.col];
+
+    if (squareOrig.piece == null || !(squareOrig.piece instanceof King))
+      return false;
+
+    var isFirstRank = fromSquare.row == toSquare.row && toSquare.row == 0 || toSquare.row == 7;
+    var isCastleColumn = toSquare.col == 6 || toSquare.col == 2;
+    var isKingOriginalPosition = fromSquare.col == 4;
+
+    return isFirstRank && isKingOriginalPosition && isCastleColumn;
+  }
 
   this.isValidMove = function (from, to) {
     var fromSquare = null;
