@@ -53,27 +53,31 @@ function King(isWhite) {
             }
         });
 
-        //add clastle
-        if(this.canShortCastle())
-            filtered.push(this.chessboard.getSquare(this.row, this.col + 2));
+        var isCheck = this.chessboard.isCheck();
 
-        if(this.canLongCastle())
-            filtered.push(this.chessboard.getSquare(this.row, this.col - 2));
+        if(!isCheck) //i cant castle in check
+        {
+            //add clastle
+            if (this.canShortCastle())
+                filtered.push(this.chessboard.getSquare(this.row, this.col + 2));
+
+            if (this.canLongCastle())
+                filtered.push(this.chessboard.getSquare(this.row, this.col - 2));
+        }
 
         return filtered;
     }
 
-    this.canShortCastle = function()
-    {
-         // () Neither the king nor the chosen rook has previously moved.
+    this.canShortCastle = function () {
+        // () Neither the king nor the chosen rook has previously moved.
         // () There are no pieces between the king and the chosen rook.
         // () The king is not currently in check.
         // () The king does not pass through a square that is attacked by an enemy piece.
         // () The king does not end up in check. (True of any legal move.)
-        if(this._wereKingOrRookMoved())
+        if (this._wereKingOrRookMoved())
             return false;
 
-        if(!this._isShortCastlePathFree())
+        if (!this._isShortCastlePathFree())
             return false;
 
         var squaresKingGoesThrough = [];

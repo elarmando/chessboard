@@ -138,6 +138,9 @@ function ChessBoard() {
   };
 
   this.isCheck = function (isWhite) {
+    if(isWhite === undefined)
+      isWhite = this.isWhiteTurn;
+    
     var myPieces = this.getPieces(isWhite);
     var enemyPieces = this.getPieces(!isWhite);
     var myKing = this._findKing(myPieces);
