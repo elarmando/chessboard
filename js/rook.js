@@ -1,5 +1,8 @@
 
-function Rook(isWhite) {
+
+import Piece from "./piece.js";
+import PIECES from "./pieces.js";
+export default function Rook(isWhite) {
     var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;

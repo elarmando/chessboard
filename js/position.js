@@ -1,16 +1,9 @@
-import ChessBoard from "./js/board.js";
-import PieceFactory from "./js/PieceFactory.js";
-import Computer from "./js/computer.js";
+import PieceFactory from "./PieceFactory";
 
-(function(){
-
-    var chessboard = null;
-    var ui = null;
-
-    var init =  function()
+export default class Position
+{
+    setupDefault(chessboard)
     {
-        chessboard = new ChessBoard();
-        ui = new ChessboardIU(".chessboard", chessboard);
         var factory = new PieceFactory();
 
         var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'}
@@ -49,17 +42,5 @@ import Computer from "./js/computer.js";
         chessboard.addPiece("g1",factory.createLightKight());
         chessboard.addPiece("h1", factory.createLightRook());
 
-        ui.draw();
-        
-          var computer = new Computer(chessboard);
-        computer.isWhite = false;
-        
-        chessboard.onAfterMove = function()
-        {
-            computer.move();
-            ui.draw();
-        } 
     }
-    
-    window.onload  = init;
-})();
+}

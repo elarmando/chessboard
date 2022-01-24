@@ -1,4 +1,9 @@
-function King(isWhite) {
+
+import Piece from "./piece.js";
+import PIECES from "./pieces.js";
+import Rook from "./rook.js";
+
+export default function King(isWhite) {
     var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;

@@ -1,5 +1,7 @@
 
-function Bishop(isWhite) {
+import Piece from "./piece.js";
+import PIECES from "./pieces.js";
+export default function Bishop(isWhite) {
     var self  = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;

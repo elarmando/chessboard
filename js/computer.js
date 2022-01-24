@@ -1,4 +1,5 @@
-function Computer(chessboard)
+import DataSquare from "./dataSquare.js";
+export default function Computer(chessboard)
 {
     var self = this;
     this.isWhite = false;

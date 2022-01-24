@@ -1,0 +1,26 @@
+{
+  "name": "chessboard",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elarmando/chessboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elarmando/chessboard/issues"
+  },
+  "homepage": "https://github.com/elarmando/chessboard#readme",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  },
+  "type": "module",
+  "jest":
+  {
+    "transform": {}
+  }
+}

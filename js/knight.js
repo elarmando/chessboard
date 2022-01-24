@@ -1,5 +1,10 @@
 
-function Knight(isWhite) {
+
+import Piece from "./piece.js";
+import PIECES from "./pieces.js";
+
+
+export default function Knight(isWhite) {
     var self = this;
     Piece.call(this, isWhite);
     this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;

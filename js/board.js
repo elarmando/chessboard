@@ -1,4 +1,9 @@
-function ChessBoard() {
+import King from "./king.js";
+import Rook from "./rook.js";
+import DataSquare from "./dataSquare.js";
+import Square from "./square.js"
+
+export default function ChessBoard() {
   var self = this;
   var MAX_COL = 7;
   var MAX_ROW = 7;
@@ -459,18 +464,4 @@ function ChessBoard() {
   this._init();
 }
 
-function DataSquare(col, row, piece) {
-  this.col = col;
-  this.row = row;
-  this.piece = piece;
 
-  this.isEqual = function (square) {
-    if (!(square instanceof DataSquare)) return false;
-
-    return square.col == this.col && square.row == this.row;
-  };
-}
-
-function Square() {
-  this.piece = null;
-}

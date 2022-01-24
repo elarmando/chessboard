@@ -1,5 +1,8 @@
 
-function Pawn(isWhite) {
+
+import Piece from "./piece.js";
+import PIECES from "./pieces.js";
+export default function Pawn(isWhite) {
     var self = this;
     Piece.call(this, isWhite);
     this.direction = (isWhite) ? 1 : -1;
