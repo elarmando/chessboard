@@ -15,3 +15,5 @@
    () The king does not end up in check. (True of any legal move.)
 
    (x) swap rook on castle
+
+(x) setup position from fen
