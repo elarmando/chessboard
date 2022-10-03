@@ -9,6 +9,14 @@ export default class Knight extends Piece {
         this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
     }
 
+    copy()
+    {
+        var newPiece = new King(this.isWhite);
+        this.copyBase(newPiece);
+
+        return newPiece;
+    }
+
     getAttackedSquares() {
         var chessboard = this.chessboard;
 

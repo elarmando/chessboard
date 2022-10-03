@@ -7,6 +7,15 @@ export default class Rook extends Piece {
         super(isWhite);
         this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
     }
+
+    copy()
+    {
+        var newPiece = new Rook(this.isWhite);
+        this.copyBase(newPiece);
+
+        return newPiece;
+    }
+
     getAttackedSquares() {
         var squares = [];
         var chessboard = this.chessboard;

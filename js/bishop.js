@@ -7,6 +7,14 @@ export default class Bishop extends Piece{
         this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;
     }
 
+    copy()
+    {
+        var newBishop = new Bishop(this.isWhite);
+        this.copyBase(newBishop);
+
+        return newBishop;
+    }
+
     getAttackedSquares() {
         var chessboard = this.chessboard;
         var icol = this.col + 1;

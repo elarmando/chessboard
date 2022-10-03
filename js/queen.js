@@ -7,6 +7,14 @@ export default class Queen extends Piece {
         this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
     }
 
+    copy()
+    {
+        var newPiece = new Queen(this.isWhite);
+        this.copyBase(newPiece);
+
+        return newPiece;
+    }
+
     getAttackedSquares() {
         var chessboard = this.chessboard;
         var squares = [];

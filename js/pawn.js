@@ -10,6 +10,14 @@ export default class Pawn extends Piece {
         this.className = (isWhite) ? PIECES.L_PAWN : PIECES.D_PAWN;
     }
 
+    copy()
+    {
+        var newPiece = new Pawn(this.isWhite);
+        this.copyBase(newPiece);
+
+        return newPiece;
+    }
+
     getAttackedSquares () {
         var chessboard = this.chessboard;
         var squares = [];
