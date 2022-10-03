@@ -3,20 +3,22 @@ import Rook from "./rook.js";
 import DataSquare from "./dataSquare.js";
 import Square from "./square.js"
 
-export default function ChessBoard() {
-  var self = this;
-  var MAX_COL = 7;
-  var MAX_ROW = 7;
+export default class ChessBoard {
+  constructor()
+  {
+    this.MAX_COL = 7;
+    this.MAX_ROW = 7;
+    this.isWhiteTurn = true;
+    this.squares = [];
+    this.onAfterMove = null;
+    this._init();
+  }
 
-  this.isWhiteTurn = true;
-  this.squares = [];
-  this.onAfterMove = null;
-
-  this._init = function () {
+  _init () {
     this._createBoard();
   };
 
-  this._createBoard = function () {
+  _createBoard () {
     this.squares = [];
 
     for (var i = 0; i < 8; i++) {
@@ -29,8 +31,8 @@ export default function ChessBoard() {
     }
   };
 
-  this.addPiece = function (squareStrings, piece) {
-    var square = convertSquareString(squareStrings);
+  addPiece (squareStrings, piece) {
+    var square = this.convertSquareString(squareStrings);
 
     var row = square.row;
     var col = square.col;
@@ -49,9 +51,9 @@ export default function ChessBoard() {
     }
   };
 
-  this.getPiece = function (row, col) {
+  getPiece (row, col) {
     if (typeof row == "string") {
-      var square = convertSquareString(row);
+      var square = this.convertSquareString(row);
 
       if (square) {
         row = square.row;
@@ -65,7 +67,7 @@ export default function ChessBoard() {
     return piece;
   };
 
-  this.getSquare = function (row, col) {
+  getSquare (row, col) {
     if (!this.squares[row]) return;
 
     if (!this.squares[row][col]) return null;
@@ -76,10 +78,10 @@ export default function ChessBoard() {
     return dataSquare;
   };
 
-  this._internalMove = function (from, to) {
+  _internalMove (from, to) {
     var fromSquare =
-      from instanceof DataSquare ? from : convertSquareString(from);
-    var toSquare = to instanceof DataSquare ? to : convertSquareString(to);
+      from instanceof DataSquare ? from : this.convertSquareString(from);
+    var toSquare = to instanceof DataSquare ? to : this.convertSquareString(to);
 
     if (fromSquare == null && toSquare != null) throw "invalid move";
 
@@ -107,9 +109,9 @@ export default function ChessBoard() {
     piece.row = toSquare.row;
   };
 
-  this.move = function (from, to) {
-    var fromSquare = from instanceof DataSquare ? from : convertSquareString(from);
-    var toSquare = to instanceof DataSquare ? to : convertSquareString(to);
+  move (from, to) {
+    var fromSquare = from instanceof DataSquare ? from : this.convertSquareString(from);
+    var toSquare = to instanceof DataSquare ? to : this.convertSquareString(to);
 
     if (fromSquare == null && toSquare != null)
       throw "invalid move";
@@ -139,10 +141,10 @@ export default function ChessBoard() {
     
     this.isWhiteTurn = !this.isWhiteTurn;
 
-    if (self.onAfterMove instanceof Function) self.onAfterMove();
+    if (this.onAfterMove instanceof Function) this.onAfterMove();
   };
 
-  this.isCheck = function (isWhite) {
+  isCheck (isWhite) {
     if(isWhite === undefined)
       isWhite = this.isWhiteTurn;
     
@@ -155,7 +157,7 @@ export default function ChessBoard() {
     return isCheck;
   };
 
-  this.isCheckMate = function () {
+  isCheckMate () {
     /* 0) is check
         1) king can't scape
         2) can't capture the atacking piece
@@ -222,7 +224,7 @@ export default function ChessBoard() {
     return true;
   };
 
-  this._getKing = function (isWhite) {
+  _getKing (isWhite) {
     var pieces = this.getPieces(isWhite);
     var king = null;
 
@@ -233,7 +235,7 @@ export default function ChessBoard() {
     return king;
   };
 
-  this._isPieceAttackingKing = function (king, pieces) {
+  _isPieceAttackingKing (king, pieces) {
     var isCheck = false;
 
     for (var i = 0; i < pieces.length && !isCheck; i++) {
@@ -248,7 +250,7 @@ export default function ChessBoard() {
     return isCheck;
   };
 
-  this._findKing = function (pieces) {
+  _findKing (pieces) {
     var king = null;
 
     for (var i = 0; i < pieces.length; i++) {
@@ -261,15 +263,15 @@ export default function ChessBoard() {
     return king;
   };
 
-  this.getBlackPieces = function () {
+  getBlackPieces () {
     return this.getPieces(false);
   };
 
-  this.getWhitePieces = function () {
+  getWhitePieces () {
     return this.getPieces(true);
   };
 
-  this.getPieces = function (isWhite) {
+  getPieces (isWhite) {
     var pieces = [];
 
     this.forEachPiece(function (piece) {
@@ -281,7 +283,7 @@ export default function ChessBoard() {
     return pieces;
   };
 
-  this._isCastle = function (fromSquare, toSquare) {
+  _isCastle (fromSquare, toSquare) {
     var squareOrig = this.squares[fromSquare.row][fromSquare.col];
 
     if (squareOrig.piece == null || !(squareOrig.piece instanceof King))
@@ -294,16 +296,16 @@ export default function ChessBoard() {
     return isFirstRank && isKingOriginalPosition && isCastleColumn;
   }
 
-  this.isValidMove = function (from, to) {
+  isValidMove (from, to) {
     var fromSquare = null;
     var toSquare = null;
 
     if (from instanceof DataSquare)
       fromSquare = { col: from.col, row: from.row };
-    else fromSquare = convertSquareString(from);
+    else fromSquare = this.convertSquareString(from);
 
     if (to instanceof DataSquare) toSquare = { col: to.col, row: to.row };
-    else toSquare = convertSquareString(to);
+    else toSquare = this.convertSquareString(to);
 
     if (fromSquare == null) return false;
 
@@ -359,7 +361,7 @@ export default function ChessBoard() {
     return validMove;
   };
 
-  this.forEachPiece = function (callback) {
+  forEachPiece (callback) {
     if (!(callback instanceof Function)) return;
 
     for (var i = 0; i < 8; i++) {
@@ -372,13 +374,13 @@ export default function ChessBoard() {
     }
   };
 
-  this.getSquaresAttackedBy = function (attackedByWhite) {
+  getSquaresAttackedBy (attackedByWhite) {
     attackedByWhite = attackedByWhite === undefined ? true : attackedByWhite;
     var squares = [];
 
     this.forEachPiece((piece) => {
       if (piece.isWhite == attackedByWhite) {
-        var sqs = piece.getAttackedSquares(self);
+        var sqs = piece.getAttackedSquares(this);
         sqs.forEach((e) => {
           squares.push(e);
         });
@@ -388,7 +390,7 @@ export default function ChessBoard() {
     return squares;
   };
 
-  this.convertPositionToString = function (col, row) {
+  convertPositionToString (col, row) {
     var cols = {
       0: "a",
       1: "b",
@@ -420,15 +422,15 @@ export default function ChessBoard() {
     return res;
   };
 
-  this.getMaxCol = function () {
-    return MAX_COL;
+  getMaxCol () {
+    return this.MAX_COL;
   };
 
-  this.getMaxRow = function () {
-    return MAX_ROW;
+  getMaxRow () {
+    return this.MAX_ROW;
   };
 
-  var convertSquareString = function (square) {
+  convertSquareString (square) {
     var cols = {
       a: 0,
       b: 1,
@@ -461,7 +463,6 @@ export default function ChessBoard() {
     return { col: col, row: row };
   };
 
-  this._init();
 }
 
 

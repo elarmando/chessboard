@@ -5,52 +5,52 @@ import Queen from "./queen.js";
 import Rook from "./rook.js";
 import Bishop from "./bishop.js";
 
-export default function PieceFactory() {
-    this.createDarkBishop = function () {
+export default class PieceFactory {
+    createDarkBishop  () {
         return new Bishop(false);
     }
 
-    this.createLightBishop = function () {
+    createLightBishop  () {
         return new Bishop(true);
     }
 
-    this.createDarkRook = function () {
+    createDarkRook  () {
         return new Rook(false);
     }
 
-    this.createLightRook = function () {
+    createLightRook  () {
         return new Rook(true);
     }
 
-    this.createDarkKight = function () {
+    createDarkKight  () {
         return new Knight(false);
     }
 
-    this.createLightKight = function () {
+    createLightKight  () {
         return new Knight(true);
     }
 
-    this.createDarkQueen = function () {
+    createDarkQueen  () {
         return new Queen(false);
     }
 
-    this.createLightQueen = function () {
+    createLightQueen  () {
         return new Queen(true);
     }
 
-    this.createDarkKing = function () {
+    createDarkKing  () {
         return new King(false);
     }
 
-    this.createLightKing = function () {
+    createLightKing  () {
         return new King(true);
     }
 
-    this.createDarkPawn = function () {
+    createDarkPawn  () {
         return new Pawn(false);
     }
 
-    this.createLightPawn = function () {
+    createLightPawn  () {
         return new Pawn(true);
     }
 }
