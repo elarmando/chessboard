@@ -3,12 +3,13 @@ import Piece from "./piece.js";
 import PIECES from "./pieces.js";
 import Rook from "./rook.js";
 
-export default function King(isWhite) {
-    var self = this;
-    Piece.call(this, isWhite);
-    this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;
+export default class King extends Piece {
+    constructor(isWhite) {
+        super(isWhite);
+        this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;
+    }
 
-    this.getAttackedSquares = function () {
+    getAttackedSquares() {
         var chessboard = this.chessboard;
         var attacked = [];
 
@@ -33,15 +34,15 @@ export default function King(isWhite) {
         return filtered;
     }
 
-    this.getPossibleMoves = function () {
+    getPossibleMoves() {
         var chessboard = this.chessboard;
         var attacked = this.getAttackedSquares();
         var filtered = [];
         var attackedByEnemy = chessboard.getSquaresAttackedBy(!this.isWhite);
 
-        attacked.forEach(function (e) {
+        attacked.forEach( (e)=> {
 
-            var sameColorPiece = (e.piece && e.piece.isWhite == self.isWhite);
+            var sameColorPiece = (e.piece && e.piece.isWhite == this.isWhite);
 
             if (e != null && !sameColorPiece) {
                 var isSquareAttacked = false;
@@ -60,7 +61,7 @@ export default function King(isWhite) {
 
         var isCheck = this.chessboard.isCheck();
 
-        if(!isCheck) //i cant castle in check
+        if (!isCheck) //i cant castle in check
         {
             //add clastle
             if (this.canShortCastle())
@@ -73,7 +74,7 @@ export default function King(isWhite) {
         return filtered;
     }
 
-    this.canShortCastle = function () {
+    canShortCastle() {
         // () Neither the king nor the chosen rook has previously moved.
         // () There are no pieces between the king and the chosen rook.
         // () The king is not currently in check.
@@ -94,7 +95,7 @@ export default function King(isWhite) {
         return true;
     }
 
-    this.canLongCastle = function () {
+    canLongCastle() {
         // () Neither the king nor the chosen rook has previously moved.
         // () There are no pieces between the king and the chosen rook.
         // () The king is not currently in check.
@@ -116,7 +117,7 @@ export default function King(isWhite) {
         return true;
     }
 
-    this._areSquaresAttackedByEnemy = function (listSquares) {
+    _areSquaresAttackedByEnemy(listSquares) {
         var attackedSquares = this.chessboard.getSquaresAttackedBy(!this.isWhite);
 
         for (var i = 0; i < attackedSquares.length; i++) {
@@ -133,7 +134,7 @@ export default function King(isWhite) {
         return false;
     }
 
-    this._isShortCastlePathFree = function () {
+    _isShortCastlePathFree() {
         var piece1 = this.chessboard.getPiece(this.row, this.col + 1);
         var piece2 = this.chessboard.getPiece(this.row, this.col + 2);
 
@@ -141,7 +142,7 @@ export default function King(isWhite) {
         return piece1 == null && piece2 == null;
     }
 
-    this._isLongCastlePathFree = function () {
+    _isLongCastlePathFree() {
         var p1 = this.chessboard.getPiece(this.row, this.col - 1);
         var p2 = this.chessboard.getPiece(this.row, this.col - 2)
         var p3 = this.chessboard.getPiece(this.row, this.col - 3)
@@ -150,7 +151,7 @@ export default function King(isWhite) {
         return p1 == null && p2 == null && p3 == null;
     }
 
-    this._wereKingOrRookMoved = function () {
+    _wereKingOrRookMoved() {
         //check rook and king were not moved
         if (this.wasMoved)
             return true;
@@ -165,7 +166,7 @@ export default function King(isWhite) {
         return false;
     }
 
-    this._getRook = function () {
+    _getRook() {
         var pieces = this.chessboard.getPieces(this.isWhite);
         var rook = null;
 

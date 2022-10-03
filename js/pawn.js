@@ -2,13 +2,15 @@
 
 import Piece from "./piece.js";
 import PIECES from "./pieces.js";
-export default function Pawn(isWhite) {
-    var self = this;
-    Piece.call(this, isWhite);
-    this.direction = (isWhite) ? 1 : -1;
-    this.className = (isWhite) ? PIECES.L_PAWN : PIECES.D_PAWN;
+export default class Pawn extends Piece {
+    constructor(isWhite)
+    {
+        super(isWhite);
+        this.direction = (isWhite) ? 1 : -1;
+        this.className = (isWhite) ? PIECES.L_PAWN : PIECES.D_PAWN;
+    }
 
-    this.getAttackedSquares = function () {
+    getAttackedSquares () {
         var chessboard = this.chessboard;
         var squares = [];
 
@@ -27,7 +29,7 @@ export default function Pawn(isWhite) {
         return filtered;
     }
 
-    this.getPossibleMoves = function () {
+    getPossibleMoves () {
         var chessboard = this.chessboard;
         var possible = [];
         var attacked = this.getAttackedSquares(chessboard);
@@ -35,7 +37,7 @@ export default function Pawn(isWhite) {
         //attacked squares are possible if there is a different color piece
         attacked.forEach(e => {
 
-            if (e.piece != null && e.piece.isWhite != self.isWhite)
+            if (e.piece != null && e.piece.isWhite != this.isWhite)
                 possible.push(e);
         });
 
@@ -55,7 +57,7 @@ export default function Pawn(isWhite) {
         return possible;
     }
 
-    this.isValidMove = function (dataSquareOrig, dataSquareDest) {
+    isValidMove (dataSquareOrig, dataSquareDest) {
         if (this.canMoveForward(dataSquareOrig, dataSquareDest))
             return true;
 
@@ -65,7 +67,7 @@ export default function Pawn(isWhite) {
         return false;
     }
 
-    this.canMoveForward = function (dataSquareOrig, dataSquareDest) {
+    canMoveForward (dataSquareOrig, dataSquareDest) {
         /*
             pawn can move forward one square and two squares in the first movement
             only if destiny is a free square 
@@ -79,14 +81,14 @@ export default function Pawn(isWhite) {
             if (origRow + increment == destRow && dataSquareDest.piece == null)
                 return true;
 
-            if (!self.wasMoved && origRow + (2 * increment) == destRow && dataSquareDest.piece == null)
+            if (!this.wasMoved && origRow + (2 * increment) == destRow && dataSquareDest.piece == null)
                 return true;
         }
 
         return false;
     }
 
-    this.canMoveDiagonal = function (squareOrig, squareDest) {
+    canMoveDiagonal (squareOrig, squareDest) {
         var dir = this.direction * 1;
         var isRighDiagonal = squareOrig.col == squareDest.col + 1 && squareOrig.row + dir == squareDest.row;
         var canCapture = squareDest.piece != null && squareDest.piece.isWhite != this.isWhite;

@@ -1,68 +1,62 @@
 
-
 import Piece from "./piece.js";
 import PIECES from "./pieces.js";
-export default function Rook(isWhite) {
-    var self = this;
-    Piece.call(this, isWhite);
-    this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
 
-    this.getAttackedSquares = function () {
+export default class Rook extends Piece {
+    constructor(isWhite) {
+        super(isWhite);
+        this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
+    }
+    getAttackedSquares() {
         var squares = [];
         var chessboard = this.chessboard;
         var maxc = chessboard.getMaxRow();
         var maxr = chessboard.getMaxCol();
         var limit = false;
 
-        for(var icol = this.col + 1; icol <= maxc && limit == false; icol++ )
-        {
-            limit = addSquare(this.row, icol, squares);            
+        for (var icol = this.col + 1; icol <= maxc && limit == false; icol++) {
+            limit = this.addSquare(this.row, icol, squares);
         }
-        
+
         limit = false;
 
-        for(var icol = this.col - 1; icol >= 0 &&  limit == false; icol--)
-        {
-            limit = addSquare(this.row, icol,  squares);
+        for (var icol = this.col - 1; icol >= 0 && limit == false; icol--) {
+            limit = this.addSquare(this.row, icol, squares);
         }
-        
+
         limit = false;
 
-        for(var irow = this.row + 1; irow <= maxr && limit == false; irow++)
-        {
-            limit = addSquare(irow, this.col,  squares);
+        for (var irow = this.row + 1; irow <= maxr && limit == false; irow++) {
+            limit = this.addSquare(irow, this.col, squares);
         }
-        
+
         limit = false;
 
-        for(var irow = this.row - 1; irow >= 0 && limit == false; irow--)
-        {
-            limit = addSquare(irow, this.col,  squares);
+        for (var irow = this.row - 1; irow >= 0 && limit == false; irow--) {
+            limit = this.addSquare(irow, this.col, squares);
         }
 
         return squares;
     }
 
-    this.getPossibleMoves = function () {
+    getPossibleMoves() {
         return this.getAttackedSquares();
     }
 
-    this.getAttackedSquaresLine = function(targetCol, targetRow)
-    {
+    getAttackedSquaresLine(targetCol, targetRow) {
         var squares = [];
         var moves = this.getPossibleMoves();
 
-        for(var i = 0; i < moves.length; i++)
-        {
-            if(moves[i].col == targetCol || moves[i].row == targetRow)
+        for (var i = 0; i < moves.length; i++) {
+            if (moves[i].col == targetCol || moves[i].row == targetRow)
                 squares.push(moves[i]);
         }
 
         return squares;
     }
 
-    var addSquare = function (row, col, squares) {
-        var chessboard =  self.chessboard;
+    addSquare(row, col, squares) {
+        var chessboard = this.chessboard;
         var limit = false;
 
         var square = chessboard.getSquare(row, col);
@@ -70,13 +64,13 @@ export default function Rook(isWhite) {
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != self.isWhite)
+            if (square.piece.isWhite != this.isWhite)
                 squares.push(square);
         }
         else {
             squares.push(square);
         }
 
-        return limit; 
+        return limit;
     }
 }

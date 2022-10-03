@@ -1,60 +1,66 @@
+export default class Piece {
+    constructor(isWhite) {
+        this.className;
+        this.isWhite = isWhite;
+        this.chessboard = null;
+        this.wasMoved = false;
+        this.row = undefined;
+        this.col = undefined;
+    }
 
-export  default function Piece(iswhite) {
-    this.className;
-    this.isWhite = iswhite;
-    this.chessboard = null;
-    this.wasMoved = false;
-    this.row = undefined;
-    this.col = undefined;
+    copyBase(piece) {
+        piece.className = this.className;
+        piece.isWhite = this.isWhite;
+        piece.chessboard = this.chessboard;
+        piece.wasMoved = this.wasMoved;
+        piece.row = this.row;
+        piece.col = this.col;
+    }
 
-    this.isValidMove = function (origSquare, destSquare) {
+    isValidMove(origSquare, destSquare) {
         var moves = this.getPossibleMoves();
         var found = false;
         var destRow = destSquare.row;
         var destCol = destSquare.col;
-        
-        for(var i = 0; i < moves.length && !found; i++)
-        {
+
+        for (var i = 0; i < moves.length && !found; i++) {
             var move = moves[i];
-            
-            if(move.row == destRow && move.col == destCol)
+
+            if (move.row == destRow && move.col == destCol)
                 found = true;
         }
 
         return found;
     }
 
-    this.isAttackingSquare = function(row, col)
-    {
+    isAttackingSquare(row, col) {
         var squares = this.getAttackedSquares();
-        for(var i = 0; i < squares.length; i++)
-            if(squares[i].col == col && squares[i].row == row)
+        for (var i = 0; i < squares.length; i++)
+            if (squares[i].col == col && squares[i].row == row)
                 return true;
         return false;
     }
 
-    this.getAttackedSquares = function (chessboard) {
+    getAttackedSquares(chessboard) {
 
         return [];
     }
 
-    this.getPossibleMoves = function (chessboard) {
+    getPossibleMoves(chessboard) {
         return [];
     }
 
-    this.isPossibleToMoveTo = function(col, row)
-    {
+    isPossibleToMoveTo(col, row) {
         var moves = this.getPossibleMoves();
 
-        for(var i = 0; i < moves.length; i++)
-            if(moves[i].col == col && moves[i].row == row)
+        for (var i = 0; i < moves.length; i++)
+            if (moves[i].col == col && moves[i].row == row)
                 return true;
 
         return false;
     }
 
-    this.getAttackedSquaresLine = function(targetCol, targetRow)
-    {
+    getAttackedSquaresLine(targetCol, targetRow) {
         return [];
     }
 }

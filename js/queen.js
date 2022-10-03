@@ -1,14 +1,13 @@
-
-
 import Piece from "./piece.js";
 import PIECES from "./pieces.js";
 
-export default function Queen(isWhite) {
-    var self = this;
-    Piece.call(this, isWhite);
-    this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
+export default class Queen extends Piece {
+    constructor(isWhite) {
+        super(isWhite);
+        this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
+    }
 
-    this.getAttackedSquares = function () {
+    getAttackedSquares() {
         var chessboard = this.chessboard;
         var squares = [];
         var maxRow = chessboard.getMaxRow();
@@ -17,29 +16,26 @@ export default function Queen(isWhite) {
         var limit = false;
 
         for (var rowi = this.row + 1; rowi <= maxRow && limit == false; rowi++) {
-            limit = addSquare(rowi, this.col, chessboard, squares);
+            limit = this.addSquare(rowi, this.col, chessboard, squares);
         }
-        
-        limit = false;
-        
-        for(var rowi = this.row - 1; rowi >= 0 && limit == false; rowi--)
-        {
-            limit = addSquare(rowi, this.col, chessboard, squares);
-        }
-        
+
         limit = false;
 
-
-        for(var coli = this.col + 1; coli <= maxCol && limit == false; coli++ )
-        {
-            limit = addSquare(this.row, coli, chessboard, squares);
+        for (var rowi = this.row - 1; rowi >= 0 && limit == false; rowi--) {
+            limit = this.addSquare(rowi, this.col, chessboard, squares);
         }
-        
+
         limit = false;
 
-        for(var coli = this.col -1; coli >= 0 && limit == false; coli--)
-        {
-            limit = addSquare(this.row, coli, chessboard, squares);
+
+        for (var coli = this.col + 1; coli <= maxCol && limit == false; coli++) {
+            limit = this.addSquare(this.row, coli, chessboard, squares);
+        }
+
+        limit = false;
+
+        for (var coli = this.col - 1; coli >= 0 && limit == false; coli--) {
+            limit = this.addSquare(this.row, coli, chessboard, squares);
         }
 
 
@@ -47,20 +43,18 @@ export default function Queen(isWhite) {
 
         var coli = this.col - 1, rowi = this.row - 1;
 
-        while(coli >= 0 && rowi >= 0 && limit == false)
-        {
-            limit = addSquare(rowi, coli, chessboard, squares);
+        while (coli >= 0 && rowi >= 0 && limit == false) {
+            limit = this.addSquare(rowi, coli, chessboard, squares);
             coli--;
             rowi--;
         }
 
         limit = false;
-        coli = this.col + 1, rowi = this.row -1;
+        coli = this.col + 1, rowi = this.row - 1;
 
-        while(coli <= maxCol && rowi >= 0 && limit == false)
-        {
-        
-            limit = addSquare(rowi, coli, chessboard, squares);
+        while (coli <= maxCol && rowi >= 0 && limit == false) {
+
+            limit = this.addSquare(rowi, coli, chessboard, squares);
             coli++;
             rowi--;
         }
@@ -70,21 +64,19 @@ export default function Queen(isWhite) {
         coli = this.col + 1;
         rowi = this.row + 1;
 
-        while(coli <= maxCol && rowi <= maxRow && limit == false)
-        {
-            limit = addSquare(rowi, coli, chessboard, squares);
+        while (coli <= maxCol && rowi <= maxRow && limit == false) {
+            limit = this.addSquare(rowi, coli, chessboard, squares);
             coli++;
             rowi++;
         }
 
         limit = false;
 
-        coli = this.col -1;
+        coli = this.col - 1;
         rowi = this.row + 1;
 
-        while(coli >= 0 && rowi <= maxRow && limit == false)
-        {
-            limit = addSquare(rowi, coli, chessboard, squares);
+        while (coli >= 0 && rowi <= maxRow && limit == false) {
+            limit = this.addSquare(rowi, coli, chessboard, squares);
             coli--;
             rowi++;
         }
@@ -94,7 +86,7 @@ export default function Queen(isWhite) {
         return squares;
     }
 
-    var addSquare = function (row, col, chessboard, squares) {
+    addSquare(row, col, chessboard, squares) {
         var limit = false;
 
         var square = chessboard.getSquare(row, col);
@@ -102,35 +94,33 @@ export default function Queen(isWhite) {
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != self.isWhite)
+            if (square.piece.isWhite != this.isWhite)
                 squares.push(square);
         }
         else {
             squares.push(square);
         }
 
-        return limit; 
+        return limit;
     }
 
-    this.getAttackedSquaresLine = function(targetCol, targetRow)
-    {
+    getAttackedSquaresLine(targetCol, targetRow) {
         var moves = this.getPossibleMoves();
         var line = []
-        for(var i = 0; i < moves.length; i++)
-        {
+        for (var i = 0; i < moves.length; i++) {
             var difrows = Math.abs(moves[i].row - targetRow);
             var difcols = Math.abs(moves[i].col - targetCol);
 
             var samediagonal = difrows == difcols;
-            var samecolOrRow =  moves[i].col == targetCol || moves[i].row == targetRow;
+            var samecolOrRow = moves[i].col == targetCol || moves[i].row == targetRow;
 
-            if(samediagonal || samecolOrRow)
+            if (samediagonal || samecolOrRow)
                 line.push(moves[i]);
         }
         return line;
     }
 
-    this.getPossibleMoves = function () {
+    getPossibleMoves() {
         var attacked = this.getAttackedSquares();
         return attacked;
     }

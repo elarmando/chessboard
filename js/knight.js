@@ -3,51 +3,51 @@
 import Piece from "./piece.js";
 import PIECES from "./pieces.js";
 
+export default class Knight extends Piece {
+    constructor(isWhite) {
+        super(isWhite);
+        this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
+    }
 
-export default function Knight(isWhite) {
-    var self = this;
-    Piece.call(this, isWhite);
-    this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
-
-    this.getAttackedSquares = function () {
+    getAttackedSquares() {
         var chessboard = this.chessboard;
 
         var squares = [];
 
         squares.push(chessboard.getSquare(this.row + 2, this.col - 1));
         squares.push(chessboard.getSquare(this.row + 2, this.col + 1));
-        
+
         squares.push(chessboard.getSquare(this.row + 1, this.col + 2));
         squares.push(chessboard.getSquare(this.row + 1, this.col - 2));
-        
+
         squares.push(chessboard.getSquare(this.row - 1, this.col + 2));
         squares.push(chessboard.getSquare(this.row - 1, this.col - 2));
-        
+
         squares.push(chessboard.getSquare(this.row - 2, this.col + 1));
         squares.push(chessboard.getSquare(this.row - 2, this.col - 1));
 
         var filtered = [];
 
-        squares.forEach(function(e){
-           if(e)
-           {
-               if(e.piece)
-               {
-                    if(e.piece.isWhite != self.isWhite)
+        squares.forEach((e) => {
+            if (e) {
+                if (e.piece)
+                {
+
+                    if (e.piece.isWhite != this.isWhite)
                         filtered.push(e);
-               }
-               else
-               {
-                    filtered.push(e); 
-               }
-           }
-           
+                }
+                else
+                {
+
+                    filtered.push(e);
+                }
+            }
+
         });
         return filtered;
     }
 
-    this.getPossibleMoves = function () {
+    getPossibleMoves() {
         return this.getAttackedSquares();
     }
-
 }
