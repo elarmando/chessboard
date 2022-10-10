@@ -1,0 +1,38 @@
+searchCheckMate(chessboard, moves)
+{	
+	if(chessboard.isCheckMate())
+		return moves;
+
+	if(moves.length == MAX_MOVES)
+		return null;
+		
+		
+
+	var movesSolution = null
+	var moves = getMoves(chessboard)
+
+	for i to moves.length
+
+		var newMoves = [moves..., move[i]];
+		var copy = chessboard.copy();
+	
+		copy.move(move[i]);
+
+
+		var movesResult = seach(copy, newMoves);
+
+		if(movesResult != null)//found solution
+		{
+			if(movesSolution == null)
+			{
+				movesSolution = null;
+			}
+			else if(movesResult.length < movesSolution.length)
+			{
+				movesSolution = movesResult;
+			}
+		}								
+
+
+    return movesSolution;
+}
