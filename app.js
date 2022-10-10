@@ -1,5 +1,4 @@
 import ChessBoard from "./js/board.js";
-import PieceFactory from "./js/PieceFactory.js";
 import Computer from "./js/computer.js";
 import Position from "./js/position.js"
 
@@ -16,8 +15,7 @@ import Position from "./js/position.js"
 
         let position = new Position();
        // position.setupDefault(chessboard);
-       debugger;
-       position.setupFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", chessboard);
+        position.setupFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", chessboard);
 
         ui.draw();
         

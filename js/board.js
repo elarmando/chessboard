@@ -31,6 +31,21 @@ export default class ChessBoard {
     }
   };
 
+  copy()
+  {
+    var newBoard = new ChessBoard();
+    newBoard.isWhiteTurn = this.isWhiteTurn;
+    newBoard.onAfterMove = this.onAfterMove;
+
+    for(var i = 0; i < 8; i++)
+    {
+      for(var j = 0; j < 8; j++)
+        newBoard.squares[i][j] = this.squares[i][j].copy();
+    }
+
+    return newBoard;
+  }
+
   addPiece (squareStrings, piece) {
     var square = this.convertSquareString(squareStrings);
 

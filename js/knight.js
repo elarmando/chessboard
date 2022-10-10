@@ -11,7 +11,7 @@ export default class Knight extends Piece {
 
     copy()
     {
-        var newPiece = new King(this.isWhite);
+        var newPiece = new Knight(this.isWhite);
         this.copyBase(newPiece);
 
         return newPiece;
