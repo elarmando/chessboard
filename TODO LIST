@@ -17,3 +17,6 @@
    (x) swap rook on castle
 
 (x) setup position from fen
+
+() Page to solve mates
+    () copy position from fen

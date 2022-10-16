@@ -1,0 +1,143 @@
+
+.chessboard
+{
+
+
+}
+
+.chessboard .row
+{
+    font-size:0;
+}
+.chessboard .row .square 
+{
+    display:inline-block;
+    height: 100px;
+    width: 100px;
+    border: 1px;
+}
+
+.piece 
+{
+    height:100px;
+    width: 100px;
+    pointer-events: none;
+}
+
+.chessboard .row .square.white
+{
+    background-color: darkkhaki;
+}
+
+.chessboard .row .square.black
+{
+    background-color: green;
+}
+
+.chessboard .row .square.black.attacked
+{
+    background-color: red;
+}
+
+.chessboard .row .square.white.attacked
+{
+    background-color: orange;
+}
+
+.piece.piece-darkpawn
+{
+    background-image: url(../resources/pieces/Chess_pdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-lightpawn
+{
+    background-image: url(../resources/pieces/Chess_plt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-darkbishop
+{
+    background-image: url(../resources/pieces/Chess_bdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.piece.piece-lightbishop
+{
+    background-image: url(../resources/pieces/Chess_blt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.piece.piece-darkrook
+{
+    background-image: url(../resources/pieces/Chess_rdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-lightrook
+{
+    background-image: url(../resources/pieces/Chess_rlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-darkknight
+{
+    background-image: url(../resources/pieces/Chess_ndt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-lightknight
+{
+    background-image: url(../resources/pieces/Chess_nlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-darkking
+{
+    background-image: url(../resources/pieces/Chess_kdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-lightking
+{
+    background-image: url(../resources/pieces/Chess_klt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-darkqueen
+{
+    background-image: url(../resources/pieces/Chess_qdt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.piece-lightqueen
+{
+    background-image: url(../resources/pieces/Chess_qlt60.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.piece.dragging
+{
+    position: absolute;
+    pointer-events: none;
+}
+
+
+/***************************/
+#fen-textarea{
+    width:100%;
+}
