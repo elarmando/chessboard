@@ -36,3 +36,27 @@ searchCheckMate(chessboard, moves)
 
     return movesSolution;
 }
+
+//normal algorithm
+
+search(chessboard)
+{
+	if(chessboard.isCheckMate())
+		return chessboard;
+
+	if(depth == MAX_MOVES)
+		return null;
+
+	var moves = getMove(chessboard);
+
+	foreach(var move in moves)
+	{
+		var chesscopy = chessboard.copy();
+		chesscopy.move(move);
+
+		if(search(chessboard) != null)
+			return chessboard;
+	}
+
+	return null;
+}

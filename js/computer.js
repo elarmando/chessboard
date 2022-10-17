@@ -63,8 +63,39 @@ export default function Computer(chessboard)
 }
 
 
+/* class CheckMate
+{
+    MAX_DEPTH = 3;
+
+    search(chessboard, depth)
+    {
+        if(chessboard.isCheckMate())
+            return chessboard;
+
+        if(depth == this.MAX_DEPTH)
+            return null;//not found
+
+
+        var moves = chessboard.getMoves();
+
+        for(var i = 0; i < moves.length; i++)
+        {
+            var move = moves[i];
+            var copy = chessboard.copy();
+            copy.move(move.squareFrom, move.squareTo);
+
+            var solution = this.search(copy, depth + 1 );
+
+            if(solution != null)
+                return solution;
+        }
+
+        return null;
+    }
+} */
+/*
 function PieceMove(squareFrom, squareTo)
 {
     this.squareFrom = squareFrom;
     this.squareTo = squareTo;
-}
+}*/

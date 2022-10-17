@@ -405,7 +405,42 @@ export default class ChessBoard {
     return squares;
   };
 
-  convertPositionToString (col, row) {
+  getMoves()
+  {
+    this._getValidMoves();
+  }
+
+  _getValidMoves(){
+    var moves = this._getMoves();
+    var validMoves = [];
+
+    moves.forEach(e => {
+      if (this.isValidMove(e.squareFrom, e.squareTo))
+        validMoves.push(e);
+    });
+
+    return validMoves;
+  }
+
+  _getMoves() {
+    var pieces = this.getPieces(self.isWhite);
+    var listOfMoves = [];
+
+    for (var i = 0; i < pieces.length; i++) {
+      var piece = pieces[i];
+      var moves = piece.getPossibleMoves();
+
+      for (var j = 0; j < moves.length; j++) {
+        var squareFrom = new DataSquare(piece.col, piece.row);
+        var squareTo = moves[j];
+        listOfMoves.push(new PieceMove(squareFrom, squareTo));
+      }
+    }
+
+    return listOfMoves;
+  }
+
+  convertPositionToString(col, row) {
     var cols = {
       0: "a",
       1: "b",
@@ -437,15 +472,15 @@ export default class ChessBoard {
     return res;
   };
 
-  getMaxCol () {
+  getMaxCol() {
     return this.MAX_COL;
   };
 
-  getMaxRow () {
+  getMaxRow() {
     return this.MAX_ROW;
   };
 
-  convertSquareString (square) {
+  convertSquareString(square) {
     var cols = {
       a: 0,
       b: 1,
@@ -481,3 +516,8 @@ export default class ChessBoard {
 }
 
 
+function PieceMove(squareFrom, squareTo)
+{
+    this.squareFrom = squareFrom;
+    this.squareTo = squareTo;
+}

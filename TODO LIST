@@ -19,4 +19,4 @@
 (x) setup position from fen
 
 () Page to solve mates
-    () copy position from fen
+    (X) copy position from fen
