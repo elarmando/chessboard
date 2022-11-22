@@ -22,6 +22,13 @@ export default function Computer(chessboard)
         chessboard.move(move.squareFrom, move.squareTo);
     }
 
+    this.findCheckMate = function()
+    {
+        var finder = new CheckMate();
+        var moves = finder.find(this.chessboard);
+        return moves;
+    }
+
     this._getValidMoves = function()
     {
         var moves = this._getMoves();
@@ -62,6 +69,46 @@ export default function Computer(chessboard)
     }
 }
 
+
+class CheckMate
+{
+    find(chessboard)
+    {
+        var moves = [];
+        moves = this._find(chessboard, moves);
+        return moves;
+    }
+
+    _find(chessboard, moves)
+    {
+        if(chessboard.isCheckMate())
+            return moves;
+        
+        var solutionMoves = null;
+
+        for(var i = 0; i < moves.length; i++)
+        {
+            var move = moves[i];
+            var newMoves = [...moves, move];
+            var boardCopy = chessboard.copy();
+
+            boardCopy.move(move.squareFrom, move.squareTo);
+            newMoves = this._find(boardCopy, newMoves);
+
+            if(newMoves != null)//its checkmate using the new move
+            {
+                if(solutionMoves == null)
+                    solutionMoves = newMoves;
+                else if(newMoves.length < solutionMoves.length)//keep the solution with less moves
+                    solutionMoves = newMoves;
+            }
+
+            boardCopy = null;
+        }
+
+        return solutionMoves;
+    }
+}
 
 /* class CheckMate
 {
