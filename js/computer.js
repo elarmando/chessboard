@@ -70,7 +70,7 @@ export default function Computer(chessboard)
 }
 
 
-class CheckMate
+/* class CheckMate
 {
     find(chessboard)
     {
@@ -108,14 +108,17 @@ class CheckMate
 
         return solutionMoves;
     }
-}
+} */
 
-/* class CheckMate
+export class CheckMate
 {
     MAX_DEPTH = 3;
 
     search(chessboard, depth)
     {
+        if(depth === undefined)
+            depth = 1;
+        
         if(chessboard.isCheckMate())
             return chessboard;
 
@@ -133,13 +136,15 @@ class CheckMate
 
             var solution = this.search(copy, depth + 1 );
 
-            if(solution != null)
+            if(solution != null){
+                console.log(solution);
                 return solution;
+            }
         }
 
         return null;
     }
-} */
+} 
 /*
 function PieceMove(squareFrom, squareTo)
 {

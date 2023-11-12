@@ -1,3 +1,4 @@
+import King from "./king.js";
 import Piece from "./piece.js";
 import PIECES from "./pieces.js";
 
@@ -102,8 +103,13 @@ export default class Queen extends Piece {
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != this.isWhite)
-                squares.push(square);
+            if (square.piece.isWhite != this.isWhite){
+                //there is a piece of the other color, queen can capture, except the king
+                let isNotKing =!(square.piece instanceof King)
+
+                if(isNotKing)
+                    squares.push(square);
+            }
         }
         else {
             squares.push(square);

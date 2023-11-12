@@ -1,5 +1,5 @@
 import ChessBoard from "../js/board.js";
-import Computer from "../js/computer.js";
+import Computer, {CheckMate} from "../js/computer.js";
 import Position from "../js/position.js"
 
 (function(){
@@ -8,8 +8,9 @@ import Position from "../js/position.js"
     var ui = null;
     var submitFenId = "fen-submit";
     var textAreaFen = "fen-textarea";
+    var checkMateButtonId = "find-checkmate";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    var mateFen = "8/8/8/8/2Q5/8/1k1K4/8 w - - 0 1";
+    var mateFen = "8/8/8/8/2Q5/8/k1K5/8 w - - 0 1";
 
 
     var init =  function()
@@ -22,6 +23,8 @@ import Position from "../js/position.js"
         let position = new Position();
         position.setupFromFen(mateFen, chessboard);
 
+        chessboard.setBlackTurn();
+
         ui.draw();
         
     }
@@ -30,6 +33,9 @@ import Position from "../js/position.js"
     {
         var submitFen = document.getElementById(submitFenId);
         submitFen.addEventListener("click", onSetupFen, false);
+
+        var checkMateButton = document.getElementById(checkMateButtonId);
+        checkMateButton.addEventListener("click", findCheckMate);
     }
 
     var onSetupFen = function(e)
@@ -41,6 +47,18 @@ import Position from "../js/position.js"
         let position = new Position();
         position.setupFromFen(txt, chessboard);
         ui.draw();
+    }
+
+    var findCheckMate = function(){
+        var checkmate = new CheckMate();
+        var solution = checkmate.search(chessboard);
+
+        if(solution != null){
+            console.log("solution found");
+            console.log(solution);
+        }
+
+        console.log("find checkmate");
     }
 
     window.onload  = init;

@@ -31,6 +31,14 @@ export default class ChessBoard {
     }
   };
 
+  setBlackTurn(){
+    this.isWhiteTurn = false;
+  }
+
+  setWhiteTurn(){
+    this.isWhiteTurn = true;
+  }
+
   copy()
   {
     var newBoard = new ChessBoard();
@@ -407,7 +415,7 @@ export default class ChessBoard {
 
   getMoves()
   {
-    this._getValidMoves();
+    return this._getValidMoves();
   }
 
   _getValidMoves(){
@@ -423,7 +431,7 @@ export default class ChessBoard {
   }
 
   _getMoves() {
-    var pieces = this.getPieces(self.isWhite);
+    var pieces = this.getPieces(this.isWhiteTurn);
     var listOfMoves = [];
 
     for (var i = 0; i < pieces.length; i++) {
