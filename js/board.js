@@ -31,6 +31,11 @@ export default class ChessBoard {
     }
   };
 
+  clear(){
+    this.squares = [];
+    this._createBoard();
+  }
+
   setBlackTurn(){
     this.isWhiteTurn = false;
   }

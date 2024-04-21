@@ -51,6 +51,7 @@ export default class Position
 
     setupFromFen(fenString, chessboard)
     {
+        chessboard.clear();
         var fenSplit = fenString.split(" ");
         var position = fenSplit[0];
 
@@ -70,7 +71,7 @@ export default class Position
 
                 if(isNumber)
                 {
-                    col+=isNumber;
+                    col+=num;
                 }
                 else
                 {
