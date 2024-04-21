@@ -67,7 +67,7 @@ export default class King extends Piece {
             }
         });
 
-        var isCheck = this.chessboard.isCheck();
+        var isCheck = this.chessboard.isCheck(this.isWhite);
 
         if (!isCheck) //i cant castle in check
         {

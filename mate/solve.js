@@ -23,7 +23,7 @@ import Position from "../js/position.js"
         let position = new Position();
         position.setupFromFen(mateFen, chessboard);
 
-        chessboard.setBlackTurn();
+        chessboard.setWhiteTurn();
 
         ui.draw();
         

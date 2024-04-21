@@ -114,13 +114,16 @@ export class CheckMate
 {
     MAX_DEPTH = 3;
 
-    search(chessboard, depth)
+    search(chessboard, depth, current_moves)
     {
         if(depth === undefined)
             depth = 1;
         
+        if(current_moves === undefined)
+            current_moves = [];
+
         if(chessboard.isCheckMate())
-            return chessboard;
+            return current_moves;
 
         if(depth == this.MAX_DEPTH)
             return null;//not found
@@ -131,10 +134,12 @@ export class CheckMate
         for(var i = 0; i < moves.length; i++)
         {
             var move = moves[i];
+
             var copy = chessboard.copy();
             copy.move(move.squareFrom, move.squareTo);
 
-            var solution = this.search(copy, depth + 1 );
+            var variation_moves = [...current_moves, move];
+            var solution = this.search(copy, depth + 1, variation_moves);
 
             if(solution != null){
                 console.log(solution);
@@ -151,3 +156,9 @@ function PieceMove(squareFrom, squareTo)
     this.squareFrom = squareFrom;
     this.squareTo = squareTo;
 }*/
+
+function PieceMove(squareFrom, squareTo)
+{
+    this.squareFrom = squareFrom;
+    this.squareTo = squareTo;
+}

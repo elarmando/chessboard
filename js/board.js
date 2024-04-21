@@ -47,8 +47,14 @@ export default class ChessBoard {
 
     for(var i = 0; i < 8; i++)
     {
-      for(var j = 0; j < 8; j++)
-        newBoard.squares[i][j] = this.squares[i][j].copy();
+      for(var j = 0; j < 8; j++){
+        var newSquare = this.squares[i][j].copy();
+        newBoard.squares[i][j] = newSquare;
+
+        if(newSquare.piece){
+          newSquare.piece.chessboard = newBoard;
+        }
+      }
     }
 
     return newBoard;

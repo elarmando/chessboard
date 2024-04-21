@@ -105,9 +105,9 @@ export default class Queen extends Piece {
 
             if (square.piece.isWhite != this.isWhite){
                 //there is a piece of the other color, queen can capture, except the king
-                let isNotKing =!(square.piece instanceof King)
+               // let isNotKing =!(square.piece instanceof King)
 
-                if(isNotKing)
+               // if(isNotKing)
                     squares.push(square);
             }
         }
@@ -136,6 +136,16 @@ export default class Queen extends Piece {
 
     getPossibleMoves() {
         var attacked = this.getAttackedSquares();
-        return attacked;
+        var posibleSquares = [];
+
+        for(var i = 0; i < attacked.length; i++){//filter if the attacked square is the other king
+            var square = attacked[i];
+            var isOtherKing =square.piece && square.piece.isWhite != this.isWhite && square.piece instanceof King;
+
+            if(!isOtherKing)
+                posibleSquares.push(square);
+        }
+
+        return posibleSquares;
     }
 }
