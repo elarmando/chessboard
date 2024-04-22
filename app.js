@@ -14,19 +14,20 @@ import Position from "./js/position.js"
         ui = new ChessboardIU(".chessboard", chessboard);
 
         let position = new Position();
-       // position.setupDefault(chessboard);
-        position.setupFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", chessboard);
+       position.setupDefault(chessboard);
+        //position.setupFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", chessboard);
+        //position.setupFromFen("5rk1/8/8/8/4Q3/3BK3/8/8 w - - 0 1", chessboard);
 
         ui.draw();
         
-        /*  var computer = new Computer(chessboard);
+        var computer = new Computer(chessboard);
         computer.isWhite = false;
         
         chessboard.onAfterMove = function()
         {
             computer.move();
             ui.draw();
-        } */
+        } 
     }
     
     window.onload  = init;

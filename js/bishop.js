@@ -16,6 +16,13 @@ export default class Bishop extends Piece{
     }
 
     getAttackedSquares() {
+        var protectedSquares = this.getProtectedSquares();
+        var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
+
+        return squares;
+    }
+
+    getProtectedSquares(){
         var chessboard = this.chessboard;
         var icol = this.col + 1;
         var irow = this.row + 1;
@@ -85,6 +92,8 @@ export default class Bishop extends Piece{
         return line;
     }
 
+   
+
     addSquare(row, col, chessboard, squares) {
         var limit = false;
 
@@ -93,7 +102,7 @@ export default class Bishop extends Piece{
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != this.isWhite)
+            //if (square.piece.isWhite != this.isWhite)
                 squares.push(square);
         }
         else {

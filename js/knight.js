@@ -18,6 +18,13 @@ export default class Knight extends Piece {
     }
 
     getAttackedSquares() {
+        var protectedSquares = this.getProtectedSquares();
+        var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
+
+        return squares;
+    }
+
+    getProtectedSquares(){
         var chessboard = this.chessboard;
 
         var squares = [];
@@ -41,7 +48,7 @@ export default class Knight extends Piece {
                 if (e.piece)
                 {
 
-                    if (e.piece.isWhite != this.isWhite)
+                    //if (e.piece.isWhite != this.isWhite)
                         filtered.push(e);
                 }
                 else

@@ -17,6 +17,29 @@ export default class Rook extends Piece {
     }
 
     getAttackedSquares() {
+        var protectedSquares = this.getProtectedSquares();
+        var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
+
+        return squares;
+       /* var filterSquaresWithPiecesSameColor = [];
+
+        for(let i = 0; i < protectedSquares.length; i++){
+            let square = protectedSquares[i];
+
+            if(square.piece){
+                if(square.piece.isWhite != this.isWhite){
+                    filterSquaresWithPiecesSameColor.push(square);
+                }
+            }
+            else{
+                filterSquaresWithPiecesSameColor.push(square);
+            }
+        }
+        
+        return filterSquaresWithPiecesSameColor;*/
+    }
+
+    getProtectedSquares(){
         var squares = [];
         var chessboard = this.chessboard;
         var maxc = chessboard.getMaxRow();
@@ -73,8 +96,8 @@ export default class Rook extends Piece {
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != this.isWhite)
-                squares.push(square);
+            //if (square.piece.isWhite != this.isWhite)
+            squares.push(square);
         }
         else {
             squares.push(square);
@@ -82,4 +105,5 @@ export default class Rook extends Piece {
 
         return limit;
     }
+
 }

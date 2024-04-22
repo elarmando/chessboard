@@ -16,7 +16,7 @@ export default class Queen extends Piece {
         return newPiece;
     }
 
-    getAttackedSquares() {
+    getProtectedSquares(){
         var chessboard = this.chessboard;
         var squares = [];
         var maxRow = chessboard.getMaxRow();
@@ -90,10 +90,14 @@ export default class Queen extends Piece {
             rowi++;
         }
 
-
-
         return squares;
     }
+
+    getAttackedSquares() {
+        var protectedSquares = this.getProtectedSquares();
+        return this.removeSquaresWithSameColorPieces(protectedSquares);
+    }
+
 
     addSquare(row, col, chessboard, squares) {
         var limit = false;
@@ -103,13 +107,13 @@ export default class Queen extends Piece {
         if (square.piece) {
             limit = true;
 
-            if (square.piece.isWhite != this.isWhite){
-                //there is a piece of the other color, queen can capture, except the king
-               // let isNotKing =!(square.piece instanceof King)
+            //if (square.piece.isWhite != this.isWhite){
+            //there is a piece of the other color, queen can capture, except the king
+            // let isNotKing =!(square.piece instanceof King)
 
-               // if(isNotKing)
-                    squares.push(square);
-            }
+            // if(isNotKing)
+            squares.push(square);
+            //}
         }
         else {
             squares.push(square);
@@ -138,14 +142,16 @@ export default class Queen extends Piece {
         var attacked = this.getAttackedSquares();
         var posibleSquares = [];
 
-        for(var i = 0; i < attacked.length; i++){//filter if the attacked square is the other king
+        for (var i = 0; i < attacked.length; i++) {//filter if the attacked square is the other king
             var square = attacked[i];
-            var isOtherKing =square.piece && square.piece.isWhite != this.isWhite && square.piece instanceof King;
+            var isOtherKing = square.piece && square.piece.isWhite != this.isWhite && square.piece instanceof King;
 
-            if(!isOtherKing)
+            if (!isOtherKing)
                 posibleSquares.push(square);
         }
 
         return posibleSquares;
     }
+
+
 }

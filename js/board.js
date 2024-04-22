@@ -408,6 +408,22 @@ export default class ChessBoard {
     }
   };
 
+  getSquaresProtectedBy(protectedByWhite) {
+    protectedByWhite = protectedByWhite === undefined ? true : protectedByWhite;
+    var squares = [];
+
+    this.forEachPiece((piece) => {
+      if (piece.isWhite == protectedByWhite) {
+        var sqs = piece.getProtectedSquares(this);
+        sqs.forEach((e) => {
+          squares.push(e);
+        });
+      }
+    });
+
+    return squares;
+  }
+
   getSquaresAttackedBy (attackedByWhite) {
     attackedByWhite = attackedByWhite === undefined ? true : attackedByWhite;
     var squares = [];

@@ -19,6 +19,13 @@ export default class Pawn extends Piece {
     }
 
     getAttackedSquares () {
+        var protectedSquares = this.getProtectedSquares();
+        var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
+
+        return squares;
+    }
+
+    getProtectedSquares(){
         var chessboard = this.chessboard;
         var squares = [];
 
@@ -36,18 +43,17 @@ export default class Pawn extends Piece {
 
         return filtered;
     }
-
+    
     getPossibleMoves () {
         var chessboard = this.chessboard;
-        var possible = [];
-        var attacked = this.getAttackedSquares(chessboard);
+        var possible = this.getAttackedSquares(chessboard);
 
         //attacked squares are possible if there is a different color piece
-        attacked.forEach(e => {
+        /*attacked.forEach(e => {
 
             if (e.piece != null && e.piece.isWhite != this.isWhite)
                 possible.push(e);
-        });
+        });*/
 
 
         var nextSquare2 = chessboard.getSquare(this.row + (this.direction * 2), this.col);

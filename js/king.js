@@ -18,6 +18,13 @@ export default class King extends Piece {
     }
 
     getAttackedSquares() {
+        var protectedSquares = this.getProtectedSquares();
+        var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
+
+        return squares;
+    }
+
+    getProtectedSquares(){
         var chessboard = this.chessboard;
         var attacked = [];
 
@@ -46,7 +53,7 @@ export default class King extends Piece {
         var chessboard = this.chessboard;
         var attacked = this.getAttackedSquares();
         var filtered = [];
-        var attackedByEnemy = chessboard.getSquaresAttackedBy(!this.isWhite);
+        var protectedByEnemy = chessboard.getSquaresProtectedBy(!this.isWhite);
 
         attacked.forEach( (e)=> {
 
@@ -55,8 +62,8 @@ export default class King extends Piece {
             if (e != null && !sameColorPiece) {
                 var isSquareAttacked = false;
 
-                for (var i = 0; i < attackedByEnemy.length && isSquareAttacked == false; i++) {
-                    var squaredAttacked = attackedByEnemy[i];
+                for (var i = 0; i < protectedByEnemy.length && isSquareAttacked == false; i++) {
+                    var squaredAttacked = protectedByEnemy[i];
 
                     if (e.isEqual(squaredAttacked))
                         isSquareAttacked = true;
@@ -98,7 +105,7 @@ export default class King extends Piece {
         squaresKingGoesThrough.push(this.chessboard.getSquare(this.row, this.col + 1));
         squaresKingGoesThrough.push(this.chessboard.getSquare(this.row, this.col + 2));
 
-        if (this._areSquaresAttackedByEnemy(squaresKingGoesThrough))
+        if (this._areSquaresProtectedByEnemy(squaresKingGoesThrough))
             return false;
         return true;
     }
@@ -119,22 +126,22 @@ export default class King extends Piece {
         squaresKingGoesThrough.push(this.chessboard.getSquare(this.row, this.col - 1));
         squaresKingGoesThrough.push(this.chessboard.getSquare(this.row, this.col - 2));
 
-        if (this._areSquaresAttackedByEnemy(squaresKingGoesThrough))
+        if (this._areSquaresProtectedByEnemy(squaresKingGoesThrough))
             return false;
 
         return true;
     }
 
-    _areSquaresAttackedByEnemy(listSquares) {
-        var attackedSquares = this.chessboard.getSquaresAttackedBy(!this.isWhite);
+    _areSquaresProtectedByEnemy(listSquares) {
+        var protectedByEnemy = this.chessboard.getSquaresProtectedBy(!this.isWhite);
 
-        for (var i = 0; i < attackedSquares.length; i++) {
-            var attackedSquare = attackedSquares[i];
+        for (var i = 0; i < protectedByEnemy.length; i++) {
+            var protectedSquare = protectedByEnemy[i];
 
             for (var j = 0; j < listSquares.length; j++) {
                 var square = listSquares[j];
 
-                if (attackedSquare.row == square.row && attackedSquare.col == square.col)
+                if (protectedSquare.row == square.row && protectedSquare.col == square.col)
                     return true;
             }
         }

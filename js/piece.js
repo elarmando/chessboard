@@ -1,3 +1,5 @@
+import DataSquare from "./dataSquare.js"
+
 export default class Piece {
     constructor(isWhite) {
         this.className;
@@ -62,5 +64,31 @@ export default class Piece {
 
     getAttackedSquaresLine(targetCol, targetRow) {
         return [];
+    }
+
+    removeSquaresWithSameColorPieces(squares){
+        var filterSquaresWithPiecesSameColor = [];
+
+        for(let i = 0; i < squares.length; i++){
+            let square = squares[i];
+
+            if(square.piece){
+                if(square.piece.isWhite != this.isWhite){
+                    filterSquaresWithPiecesSameColor.push(square);
+                }
+            }
+            else{
+                filterSquaresWithPiecesSameColor.push(square);
+            }
+        }
+        
+        return filterSquaresWithPiecesSameColor;
+    }
+
+    getProtectedSquares(){
+        let dataSquare = new DataSquare();
+        dataSquare.col = 3;
+        dataSquare.row = 3;
+        return [dataSquare];
     }
 }
