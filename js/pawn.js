@@ -46,14 +46,15 @@ export default class Pawn extends Piece {
     
     getPossibleMoves () {
         var chessboard = this.chessboard;
-        var possible = this.getAttackedSquares(chessboard);
+        var attacked = this.getAttackedSquares(chessboard);
+        var possible = [];
 
         //attacked squares are possible if there is a different color piece
-        /*attacked.forEach(e => {
+        attacked.forEach(e => {
 
             if (e.piece != null && e.piece.isWhite != this.isWhite)
                 possible.push(e);
-        });*/
+        })
 
 
         var nextSquare2 = chessboard.getSquare(this.row + (this.direction * 2), this.col);

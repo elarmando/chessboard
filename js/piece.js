@@ -86,9 +86,6 @@ export default class Piece {
     }
 
     getProtectedSquares(){
-        let dataSquare = new DataSquare();
-        dataSquare.col = 3;
-        dataSquare.row = 3;
-        return [dataSquare];
+        return [];
     }
 }
