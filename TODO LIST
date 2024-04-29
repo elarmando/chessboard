@@ -20,3 +20,6 @@
 
 () Page to solve mates
     (X) copy position from fen
+
+() Validate check mates: mate del pasillo, 
+  () mates donde se necesite la función isOnXRay

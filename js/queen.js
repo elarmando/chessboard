@@ -153,5 +153,58 @@ export default class Queen extends Piece {
         return posibleSquares;
     }
 
+    isSquareOnXRay(row, col){
 
+        //check diagonals
+        if(this._isInLine(col, row, -1, 1 ))
+            return true;
+
+        if(this._isInLine(col, row, 1, 1))
+            return true;
+
+        if(this._isInLine(col, row, 1, -1))
+            return true;
+
+        if(this._isInLine(col, row, -1, -1))
+            return true;
+
+        //check vertical
+        if(this._isInLine(col, row, 0, 1))
+            return true;
+
+        if(this._isInLine(col, row, 0, -1))
+            return true;
+
+        //check horizontal
+        if(this._isInLine(col, row, 1, 0))
+            return true;
+
+        if(this._isInLine(col, row, -1, 0))
+            return true;
+
+        return false;
+    }
+
+    _isInLine(x, y, dirX, dirY){
+        let isInline = false;
+
+        let px = this.col + dirX;
+        let py = this.row + dirY;
+        let maxCol = this.chessboard.getMaxCol();
+        let maxRow = this.chessboard.getMaxRow();
+
+        while(this._isInside(px, py, maxCol, maxRow)){
+            if(px == x && py == y)
+                return true;
+
+            px = px + dirX;
+            py = py + dirY;
+        }
+
+        return isInline;
+    }
+
+    _isInside(x,y, maxCol, maxRow){
+        return x>=0 && y >= 0 && x <= maxCol && y <= maxRow;
+    }
 }

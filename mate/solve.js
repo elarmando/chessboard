@@ -10,7 +10,7 @@ import Position from "../js/position.js"
     var textAreaFen = "fen-textarea";
     var checkMateButtonId = "find-checkmate";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    var mateFen = "8/8/8/8/2Q5/8/k1K5/8 w - - 0 1";
+    var mateFen = "8/8/8/Q7/8/8/k1K5/8 w - - 0 1";
 
 
     var init =  function()

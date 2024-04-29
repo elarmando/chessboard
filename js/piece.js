@@ -88,4 +88,9 @@ export default class Piece {
     getProtectedSquares(){
         return [];
     }
+
+    //should return true if the square is attacked by the piece, even if there are other pieces in the middle
+    isSquareOnXRay(row, col){
+        return false;
+    }
 }

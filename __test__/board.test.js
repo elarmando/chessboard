@@ -54,4 +54,15 @@ test("chesmate test - mate del pasillo", ()=>{
     board.setBlackTurn();
 
     expect(board.isCheckMate()).toBe(true);
+});
+
+test("chesmate test - mate del pasillo", ()=>{
+    let fen = "8/8/8/Q7/8/8/k1K5/8 b - - 0 1";
+    let position = new Position();
+    let board = new Board();
+    
+    position.setupFromFen(fen, board);
+    board.setBlackTurn();
+
+    expect(board.isCheckMate()).toBe(true);
 })

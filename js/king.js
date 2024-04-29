@@ -74,6 +74,9 @@ export default class King extends Piece {
             }
         });
 
+        //remove moves if the target square is on X ray with some piece
+        filtered = this._removeMovesIfSquareIsOnXRay(filtered);
+
         var isCheck = this.chessboard.isCheck(this.isWhite);
 
         if (!isCheck) //i cant castle in check
@@ -190,6 +193,30 @@ export default class King extends Piece {
                 rook = pieces[i];
 
         return rook;
+    }
+
+    _removeMovesIfSquareIsOnXRay(moves){
+        var filtered = [];
+        var enemyPieces = this.chessboard.getPieces(!this.isWhite);
+
+        for(let j = 0; j < moves.length; j++){
+            let move = moves[j];
+            let isOnXRay = false;
+
+            for(let i = 0; i < enemyPieces.length && isOnXRay === false; i++){
+                let piece = enemyPieces[i];
+
+                if(piece.isSquareOnXRay(move.row, move.col)
+                    && piece.isSquareOnXRay(this.row, this.col)) //i also need to check king: I should remove posible square if the king moves to that square and is check
+                    isOnXRay = true;
+            }
+
+
+            if(!isOnXRay)
+                filtered.push(move);
+        }
+        
+        return filtered;
     }
 
 }
