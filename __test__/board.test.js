@@ -65,4 +65,27 @@ test("chesmate test - mate del pasillo", ()=>{
     board.setBlackTurn();
 
     expect(board.isCheckMate()).toBe(true);
-})
+});
+
+test("mate del pasillo con torre", ()=> {
+  let fen = "2R3k1/8/6K1/8/8/8/8/8 w - - 0 1";
+  let position = new Position();
+  let board = new Board();
+
+  position.setupFromFen(fen, board);
+  board.setBlackTurn();
+
+  expect(board.isCheckMate()).toBe(true);
+});
+
+test("mate del pasillo en diagonal con alfil", ()=> {
+    let fen = "5NR1/5BKP/8/4b1k1/8/8/8/8 b - - 0 1";
+    let position = new Position();
+    let board = new Board();
+  
+    position.setupFromFen(fen, board);
+    board.setWhiteTurn();
+  
+    expect(board.isCheckMate()).toBe(true);
+  });
+  

@@ -54,6 +54,7 @@ export default class Position
         chessboard.clear();
         var fenSplit = fenString.split(" ");
         var position = fenSplit[0];
+        var turn = fenSplit.length > 1 ? fenSplit[1]: undefined;
 
         var ranks = position.split("/");
         var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'};
@@ -83,11 +84,14 @@ export default class Position
                     col++;
                 }
             }
-
-            
         }
 
-
+        if(turn != undefined){
+            if(turn === 'b')
+                chessboard.setBlackTurn();
+            else if (truen === 'w')
+                chessboard.setWhiteTurn();
+        }
     }
 
     _CreatePieceFromLetter(letter)

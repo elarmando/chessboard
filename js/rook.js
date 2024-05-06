@@ -106,4 +106,12 @@ export default class Rook extends Piece {
         return limit;
     }
 
+    //should return true if the square is attacked by the piece, even if there are other pieces in the middle
+    isSquareOnXRay(row, col){
+      if(this.col == col || this.row == row)
+        return true;
+      return false;
+    }
+
+
 }

@@ -22,4 +22,4 @@
     (X) copy position from fen
 
 () Validate check mates: mate del pasillo, 
-  () mates donde se necesite la función isOnXRay
+  (x) mates donde se necesite la función isOnXRay

@@ -111,4 +111,12 @@ export default class Bishop extends Piece{
 
         return limit;
     }
+
+    //should return true if the square is attacked by the piece, even if there are other pieces in the middle
+    isSquareOnXRay(row, col){
+        let diffy = Math.abs(this.row - row);
+        let diffx = Math.abs(this.col - col);
+        let isBishopSquare = diffy === diffx;
+        return isBishopSquare;
+    }
 }
