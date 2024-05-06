@@ -89,7 +89,7 @@ export default class Position
         if(turn != undefined){
             if(turn === 'b')
                 chessboard.setBlackTurn();
-            else if (truen === 'w')
+            else if (true === 'w')
                 chessboard.setWhiteTurn();
         }
     }

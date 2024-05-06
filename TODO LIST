@@ -20,6 +20,8 @@
 
 () Page to solve mates
     (X) copy position from fen
+    () it finds the checkmate but not the optimal one
 
 () Validate check mates: mate del pasillo, 
   (x) mates donde se necesite la función isOnXRay
+

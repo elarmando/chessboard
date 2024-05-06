@@ -112,7 +112,7 @@ export default function Computer(chessboard)
 
 export class CheckMate
 {
-    MAX_DEPTH = 3;
+    MAX_DEPTH = 10;
 
     search(chessboard, depth, current_moves)
     {
@@ -142,7 +142,6 @@ export class CheckMate
             var solution = this.search(copy, depth + 1, variation_moves);
 
             if(solution != null){
-                console.log(solution);
                 return solution;
             }
         }

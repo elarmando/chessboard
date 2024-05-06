@@ -181,6 +181,12 @@ export default class King extends Piece {
 
         if (rook.wasMoved)
             return true;
+
+        let originalPosition = this._getOriginalPosition();
+
+        if(originalPosition.row !== this.row || originalPosition.col !== this.col)
+            return true;
+
         return false;
     }
 
@@ -219,4 +225,7 @@ export default class King extends Piece {
         return filtered;
     }
 
+    _getOriginalPosition(){
+        return this.isWhite?{col: 4, row : 0}: {col: 4, row: 7};
+    }
 }
