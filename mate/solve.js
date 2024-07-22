@@ -1,6 +1,7 @@
 import ChessBoard from "../js/board.js";
 import Computer, {CheckMate} from "../js/computer.js";
 import Position from "../js/position.js"
+import Annotations from "./annotations.js";
 
 (function(){
 
@@ -16,6 +17,8 @@ import Position from "../js/position.js"
     var movesFound = [];
     var currentMoveIndex = -1;
 
+    var annotations = new Annotations();
+
     var init =  function()
     {
         initHandlers();
@@ -29,7 +32,7 @@ import Position from "../js/position.js"
         //chessboard.setWhiteTurn();
 
         ui.draw();
-        
+        annotations.draw();
     }
 
     var initHandlers = function()

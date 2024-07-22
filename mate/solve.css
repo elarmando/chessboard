@@ -1,4 +1,20 @@
 
+.main{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.annotations{
+}
+
+.annotations .move{
+    cursor: pointer;
+}
+
+.annotations .move.current{
+    background-color: green;
+}
+
 .chessboard
 {
 
@@ -7,6 +23,7 @@
 
 .chessboard .row
 {
+    display: inline-flex;
     font-size:0;
 }
 .chessboard .row .square 
