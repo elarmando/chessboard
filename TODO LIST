@@ -23,6 +23,9 @@
     () it finds the checkmate but not the optimal one
     () Panel with moves list
       (X) hardcoded list
+        (X)select current move
+        (X)next button behaviour
+        () previous button behaviour
       () real list
 
 () Validate check mates: mate del pasillo, 
