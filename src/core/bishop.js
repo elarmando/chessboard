@@ -1,5 +1,5 @@
-import Piece from "./piece.js";
-import PIECES from "./pieces.js";
+import Piece from "./piece";
+import PIECES from "./pieces";
 export default class Bishop extends Piece{
     constructor(isWhite)
     {

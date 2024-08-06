@@ -1,4 +1,3 @@
-import DataSquare from "./dataSquare.js"
 
 export default class Piece {
     constructor(isWhite) {

@@ -1,7 +1,7 @@
 
-import Piece from "./piece.js";
-import PIECES from "./pieces.js";
-import Rook from "./rook.js";
+import Piece from "./piece";
+import PIECES from "./pieces";
+import Rook from "./rook";
 
 export default class King extends Piece {
     constructor(isWhite) {

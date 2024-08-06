@@ -1,7 +1,7 @@
-import King from "./king.js";
-import Rook from "./rook.js";
-import DataSquare from "./dataSquare.js";
-import Square from "./square.js"
+import King from "./king";
+import Rook from "./rook";
+import DataSquare from "./dataSquare";
+import Square from "./square"
 
 export default class ChessBoard {
   constructor()

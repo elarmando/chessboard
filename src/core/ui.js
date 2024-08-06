@@ -1,4 +1,4 @@
-function ChessboardIU(selector, chessboard)
+export default function ChessboardIU(selector, chessboard)
 {
     var self = this;
     this.container = selector;

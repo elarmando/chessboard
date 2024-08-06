@@ -1,9 +1,9 @@
-import Pawn from "./pawn.js";
-import King from "./king.js";
-import Knight from "./knight.js";
-import Queen from "./queen.js";
-import Rook from "./rook.js";
-import Bishop from "./bishop.js";
+import Pawn from "./pawn";
+import King from "./king";
+import Knight from "./knight";
+import Queen from "./queen";
+import Rook from "./rook";
+import Bishop from "./bishop";
 
 export default class PieceFactory {
     createDarkBishop  () {

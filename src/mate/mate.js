@@ -1,7 +1,8 @@
-import ChessBoard from "../js/board.js";
-import Computer, {CheckMate} from "../js/computer.js";
-import Position from "../js/position.js"
-import Annotations from "./annotations.js";
+import ChessBoard from "../core/board";
+import Computer, {CheckMate} from "../core/computer";
+import Position from "../core/position"
+import Annotations from "./annotations";
+import ChessboardIU from "../core/ui";
 
 (function(){
 

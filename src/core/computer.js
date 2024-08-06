@@ -1,4 +1,4 @@
-import DataSquare from "./dataSquare.js";
+import DataSquare from "./dataSquare";
 export default function Computer(chessboard)
 {
     var self = this;

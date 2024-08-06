@@ -1,4 +1,4 @@
-import PieceFactory from "./PieceFactory.js";
+import PieceFactory from "./PieceFactory";
 
 export default class Position
 {
