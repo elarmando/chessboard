@@ -1,8 +1,8 @@
-import Board from "../js/board.js"
-import PieceFactory from "../js/PieceFactory.js"
-import Pawn from "../js/pawn.js"
+import Board from "../src/core/board.js"
+import PieceFactory from "../src/core/PieceFactory.js"
+import Pawn from "../src/core/pawn.js"
 
-import Position from "../js/position.js";
+import Position from "../src/core/position.js";
 
 test('test 1', ()=>{
     let board = new Board();
