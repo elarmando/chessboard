@@ -30,8 +30,6 @@ import ChessboardIU from "../core/ui";
         let position = new Position();
         position.setupFromFen(mateFen, chessboard);
 
-        //chessboard.setWhiteTurn();
-
         ui.draw();
         annotations.draw();
     }

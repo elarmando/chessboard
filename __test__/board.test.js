@@ -26,7 +26,6 @@ test('valid moves shoud not contain queen capturing the king', ()=>{
 
     let moves = board.getMoves();
 
-    console.log(moves);
     let index = moves.findIndex(e => e.squareFrom.col == 1 && e.squareFrom.row == 3 &&
                                     e.squareTo.col == 1 && e.squareTo.row == 1);
 

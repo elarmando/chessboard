@@ -178,6 +178,8 @@ export default class ChessBoard {
     if (this.onAfterMove instanceof Function) this.onAfterMove();
   };
 
+  
+
   isCheck (isWhite) {
     if(isWhite === undefined)
       isWhite = this.isWhiteTurn;
