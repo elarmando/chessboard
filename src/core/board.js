@@ -102,6 +102,15 @@ export default class ChessBoard {
   };
 
   getSquare (row, col) {
+    if(typeof row == "string"){
+      var square = this.convertSquareString(row);
+
+      if(square){
+        row = square.row;
+        col = square.col;
+      }
+
+    }
     if (!this.squares[row]) return;
 
     if (!this.squares[row][col]) return null;

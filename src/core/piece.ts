@@ -1,6 +1,14 @@
+import DataSquare from "./dataSquare";
 
 export default class Piece {
-    constructor(isWhite) {
+    isWhite: boolean;
+    className: string;
+    chessboard: any;
+    wasMoved: boolean;
+    row: number;
+    col: number;
+
+    constructor(isWhite:boolean) {
         this.className;
         this.isWhite = isWhite;
         this.chessboard = null;
@@ -9,7 +17,7 @@ export default class Piece {
         this.col = undefined;
     }
 
-    copyBase(piece) {
+    copyBase(piece: Piece) {
         piece.className = this.className;
         piece.isWhite = this.isWhite;
         piece.chessboard = this.chessboard;
@@ -18,7 +26,7 @@ export default class Piece {
         piece.col = this.col;
     }
 
-    isValidMove(origSquare, destSquare) {
+    isValidMove(origSquare:DataSquare, destSquare:DataSquare) {
         var moves = this.getPossibleMoves();
         var found = false;
         var destRow = destSquare.row;
@@ -34,7 +42,7 @@ export default class Piece {
         return found;
     }
 
-    isAttackingSquare(row, col) {
+    isAttackingSquare(row: number, col: number) {
         var squares = this.getAttackedSquares();
         for (var i = 0; i < squares.length; i++)
             if (squares[i].col == col && squares[i].row == row)
@@ -42,16 +50,15 @@ export default class Piece {
         return false;
     }
 
-    getAttackedSquares(chessboard) {
+    getAttackedSquares() :DataSquare[] {
+        return [] as DataSquare[];
+    }
 
+    getPossibleMoves(): DataSquare[] {
         return [];
     }
 
-    getPossibleMoves(chessboard) {
-        return [];
-    }
-
-    isPossibleToMoveTo(col, row) {
+    isPossibleToMoveTo(col: number, row: number) {
         var moves = this.getPossibleMoves();
 
         for (var i = 0; i < moves.length; i++)
@@ -61,11 +68,11 @@ export default class Piece {
         return false;
     }
 
-    getAttackedSquaresLine(targetCol, targetRow) {
+    getAttackedSquaresLine(targetCol: number, targetRow: number): DataSquare[] {
         return [];
     }
 
-    removeSquaresWithSameColorPieces(squares){
+    removeSquaresWithSameColorPieces(squares: DataSquare[]){
         var filterSquaresWithPiecesSameColor = [];
 
         for(let i = 0; i < squares.length; i++){
@@ -84,12 +91,12 @@ export default class Piece {
         return filterSquaresWithPiecesSameColor;
     }
 
-    getProtectedSquares(){
+    getProtectedSquares(): DataSquare[]{
         return [];
     }
 
     //should return true if the square is attacked by the piece, even if there are other pieces in the middle
-    isSquareOnXRay(row, col){
+    isSquareOnXRay(row: number, col:number){
         return false;
     }
 }
