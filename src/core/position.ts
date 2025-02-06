@@ -7,11 +7,11 @@ export default class Position
 
     }
 
-    setupDefault(chessboard)
+    setupDefault(chessboard: any)
     {
         var factory = new PieceFactory();
 
-        var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'}
+        var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'} as any;
 
         for(var i = 0; i < 8; i++)
         {
@@ -49,7 +49,7 @@ export default class Position
 
     }
 
-    setupFromFen(fenString, chessboard)
+    setupFromFen(fenString: string, chessboard:any)
     {
         chessboard.clear();
         var fenSplit = fenString.split(" ");
@@ -57,7 +57,7 @@ export default class Position
         var turn = fenSplit.length > 1 ? fenSplit[1]: undefined;
 
         var ranks = position.split("/");
-        var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'};
+        var convertCol = {0 : 'a', 1:'b', 2: 'c', 3:'d', 4:'e', 5:'f', 6:'g', 7:'h'} as any;
 
         for(let indexRank = 0; indexRank < ranks.length; indexRank++)
         {
@@ -89,12 +89,12 @@ export default class Position
         if(turn != undefined){
             if(turn === 'b')
                 chessboard.setBlackTurn();
-            else if (true === 'w')
+            else if (turn === 'w')
                 chessboard.setWhiteTurn();
         }
     }
 
-    _CreatePieceFromLetter(letter)
+    _CreatePieceFromLetter(letter: string)
     {
         var factory = new PieceFactory();
         if(letter == "r")
@@ -125,7 +125,7 @@ export default class Position
         throw new Error("unrecognize piece letter " + letter);
     }
 
-    _isNumeric(s) {
+    _isNumeric(s:any) {
         return !isNaN(s - parseFloat(s));
     }
 }

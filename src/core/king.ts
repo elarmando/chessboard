@@ -1,10 +1,11 @@
 
+import DataSquare from "./dataSquare";
 import Piece from "./piece";
 import PIECES from "./pieces";
 import Rook from "./rook";
 
 export default class King extends Piece {
-    constructor(isWhite) {
+    constructor(isWhite: boolean) {
         super(isWhite);
         this.className = (isWhite) ? PIECES.L_KING : PIECES.D_KING;
     }
@@ -24,7 +25,7 @@ export default class King extends Piece {
         return squares;
     }
 
-    getProtectedSquares(){
+    getProtectedSquares(): DataSquare[]{
         var chessboard = this.chessboard;
         var attacked = [];
 
@@ -39,7 +40,7 @@ export default class King extends Piece {
         attacked.push(chessboard.getSquare(this.row - 1, this.col + 1));
         attacked.push(chessboard.getSquare(this.row - 1, this.col - 1));
 
-        var filtered = [];
+        var filtered : DataSquare[] = [];
 
         attacked.forEach(e => {
             if (e != null && e != undefined)
@@ -52,7 +53,7 @@ export default class King extends Piece {
     getPossibleMoves() {
         var chessboard = this.chessboard;
         var attacked = this.getAttackedSquares();
-        var filtered = [];
+        var filtered : DataSquare[] = [];
         var protectedByEnemy = chessboard.getSquaresProtectedBy(!this.isWhite);
 
         attacked.forEach( (e)=> {
@@ -135,7 +136,7 @@ export default class King extends Piece {
         return true;
     }
 
-    _areSquaresProtectedByEnemy(listSquares) {
+    _areSquaresProtectedByEnemy(listSquares: DataSquare[]) {
         var protectedByEnemy = this.chessboard.getSquaresProtectedBy(!this.isWhite);
 
         for (var i = 0; i < protectedByEnemy.length; i++) {
@@ -201,7 +202,7 @@ export default class King extends Piece {
         return rook;
     }
 
-    _removeMovesIfSquareIsOnXRay(moves){
+    _removeMovesIfSquareIsOnXRay(moves: DataSquare[]){
         var filtered = [];
         var enemyPieces = this.chessboard.getPieces(!this.isWhite);
 

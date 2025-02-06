@@ -1,7 +1,9 @@
 import Piece from "./piece";
 import PIECES from "./pieces";
+import DataSquare from "./dataSquare";
+
 export default class Bishop extends Piece{
-    constructor(isWhite)
+    constructor(isWhite: boolean)
     {
         super(isWhite)
         this.className = (isWhite) ? PIECES.L_BISHOP : PIECES.D_BISHOP;
@@ -22,14 +24,14 @@ export default class Bishop extends Piece{
         return squares;
     }
 
-    getProtectedSquares(){
+    getProtectedSquares(): DataSquare[] {
         var chessboard = this.chessboard;
         var icol = this.col + 1;
         var irow = this.row + 1;
         var mrow = chessboard.getMaxCol();
         var mcol = chessboard.getMaxRow();
         var limit = false;
-        var squares = [];
+        var squares: DataSquare[] = [];
 
         while (icol <= mcol && irow <= mrow && limit == false) {
             limit = this.addSquare(irow, icol, chessboard, squares);
@@ -76,7 +78,7 @@ export default class Bishop extends Piece{
         return this.getAttackedSquares();
     }
 
-    getAttackedSquaresLine(targetCol, targetRow) {
+    getAttackedSquaresLine(targetCol: number, targetRow: number) {
         //This function returns all the squares attacked that are aligned with the target square (they are in the same bishop diagonal) 
         var line = [];
         var moves = this.getPossibleMoves();
@@ -92,9 +94,7 @@ export default class Bishop extends Piece{
         return line;
     }
 
-   
-
-    addSquare(row, col, chessboard, squares) {
+    addSquare(row: number, col: number, chessboard: any, squares: DataSquare[]) {
         var limit = false;
 
         var square = chessboard.getSquare(row, col);
@@ -113,7 +113,7 @@ export default class Bishop extends Piece{
     }
 
     //should return true if the square is attacked by the piece, even if there are other pieces in the middle
-    isSquareOnXRay(row, col){
+    isSquareOnXRay(row: number, col: number){
         let diffy = Math.abs(this.row - row);
         let diffx = Math.abs(this.col - col);
         let isBishopSquare = diffy === diffx;

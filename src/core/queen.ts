@@ -1,9 +1,10 @@
+import DataSquare from "./dataSquare";
 import King from "./king";
 import Piece from "./piece";
 import PIECES from "./pieces";
 
 export default class Queen extends Piece {
-    constructor(isWhite) {
+    constructor(isWhite: boolean) {
         super(isWhite);
         this.className = (isWhite) ? PIECES.L_QUEEN : PIECES.D_QUEEN;
     }
@@ -18,7 +19,7 @@ export default class Queen extends Piece {
 
     getProtectedSquares(){
         var chessboard = this.chessboard;
-        var squares = [];
+        var squares: DataSquare[] = [];
         var maxRow = chessboard.getMaxRow();
         var maxCol = chessboard.getMaxCol();
 
@@ -99,7 +100,7 @@ export default class Queen extends Piece {
     }
 
 
-    addSquare(row, col, chessboard, squares) {
+    addSquare(row: number, col: number, chessboard: any, squares: DataSquare[]) {
         var limit = false;
 
         var square = chessboard.getSquare(row, col);
@@ -122,7 +123,7 @@ export default class Queen extends Piece {
         return limit;
     }
 
-    getAttackedSquaresLine(targetCol, targetRow) {
+    getAttackedSquaresLine(targetCol: number, targetRow: number) {
         var moves = this.getPossibleMoves();
         var line = []
         for (var i = 0; i < moves.length; i++) {
@@ -153,7 +154,7 @@ export default class Queen extends Piece {
         return posibleSquares;
     }
 
-    isSquareOnXRay(row, col){
+    isSquareOnXRay(row: number, col: number){
 
         //check diagonals
         if(this._isInLine(col, row, -1, 1 ))
@@ -185,7 +186,7 @@ export default class Queen extends Piece {
         return false;
     }
 
-    _isInLine(x, y, dirX, dirY){
+    _isInLine(x: number, y: number, dirX: number, dirY: number){
         let isInline = false;
 
         let px = this.col + dirX;
@@ -204,7 +205,7 @@ export default class Queen extends Piece {
         return isInline;
     }
 
-    _isInside(x,y, maxCol, maxRow){
+    _isInside(x: number,y: number, maxCol: number, maxRow: number){
         return x>=0 && y >= 0 && x <= maxCol && y <= maxRow;
     }
 }

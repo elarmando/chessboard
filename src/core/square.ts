@@ -1,6 +1,7 @@
+import Piece from "./piece";
 
 export default class Square {
-    piece;
+    piece: Piece;
 
     constructor()
     {

@@ -1,8 +1,9 @@
+import DataSquare from "./dataSquare";
 import Piece from "./piece";
 import PIECES from "./pieces";
 
 export default class Knight extends Piece {
-    constructor(isWhite) {
+    constructor(isWhite: boolean) {
         super(isWhite);
         this.className = (isWhite) ? PIECES.L_KNIGHT : PIECES.D_KNIGHT;
     }
@@ -22,7 +23,7 @@ export default class Knight extends Piece {
         return squares;
     }
 
-    getProtectedSquares(){
+    getProtectedSquares(): DataSquare[] {
         var chessboard = this.chessboard;
 
         var squares = [];
@@ -39,7 +40,7 @@ export default class Knight extends Piece {
         squares.push(chessboard.getSquare(this.row - 2, this.col + 1));
         squares.push(chessboard.getSquare(this.row - 2, this.col - 1));
 
-        var filtered = [];
+        var filtered : DataSquare[]= [];
 
         squares.forEach((e) => {
             if (e) {

@@ -1,9 +1,10 @@
 
+import DataSquare from "./dataSquare";
 import Piece from "./piece";
 import PIECES from "./pieces";
 
 export default class Rook extends Piece {
-    constructor(isWhite) {
+    constructor(isWhite: boolean) {
         super(isWhite);
         this.className = (isWhite) ? PIECES.L_ROOK : PIECES.D_ROOK;
     }
@@ -16,7 +17,7 @@ export default class Rook extends Piece {
         return newPiece;
     }
 
-    getAttackedSquares() {
+    getAttackedSquares() :DataSquare[]{
         var protectedSquares = this.getProtectedSquares();
         var squares = this.removeSquaresWithSameColorPieces(protectedSquares);
 
@@ -39,8 +40,8 @@ export default class Rook extends Piece {
         return filterSquaresWithPiecesSameColor;*/
     }
 
-    getProtectedSquares(){
-        var squares = [];
+    getProtectedSquares() {
+        var squares: DataSquare[] = [];
         var chessboard = this.chessboard;
         var maxc = chessboard.getMaxRow();
         var maxr = chessboard.getMaxCol();
@@ -71,11 +72,11 @@ export default class Rook extends Piece {
         return squares;
     }
 
-    getPossibleMoves() {
+    getPossibleMoves(): DataSquare[] {
         return this.getAttackedSquares();
     }
 
-    getAttackedSquaresLine(targetCol, targetRow) {
+    getAttackedSquaresLine(targetCol: number, targetRow: number) {
         var squares = [];
         var moves = this.getPossibleMoves();
 
@@ -87,7 +88,7 @@ export default class Rook extends Piece {
         return squares;
     }
 
-    addSquare(row, col, squares) {
+    addSquare(row: number, col: number, squares: DataSquare[]) {
         var chessboard = this.chessboard;
         var limit = false;
 
@@ -107,7 +108,7 @@ export default class Rook extends Piece {
     }
 
     //should return true if the square is attacked by the piece, even if there are other pieces in the middle
-    isSquareOnXRay(row, col){
+    isSquareOnXRay(row: number, col: number){
       if(this.col == col || this.row == row)
         return true;
       return false;

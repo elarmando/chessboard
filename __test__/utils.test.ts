@@ -104,7 +104,7 @@ test("Utils_getMoveAsString_QueenMoves", () => {
     chessBoard.move("e7", "e5");
 
     var str = utils.getMoveAsString("d1", "e2"); 
-    expect(str).toBe("Qd2");
+    expect(str).toBe("Qe2");
 });
 
 test("Utils_getMoveAsString_QueenTakes", () => {
@@ -116,7 +116,7 @@ test("Utils_getMoveAsString_QueenTakes", () => {
 
     chessBoard.move("e2", "e4");
     chessBoard.move("e7", "e5");
-    chessBoard.move("e2", "e3");
+    chessBoard.move("c2", "c3");
     chessBoard.move("c8", "g4");
 
     var str = utils.getMoveAsString("d1", "g4"); 

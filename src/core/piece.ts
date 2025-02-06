@@ -99,4 +99,8 @@ export default class Piece {
     isSquareOnXRay(row: number, col:number){
         return false;
     }
+
+    copy(): Piece {
+        return null;
+    }
 }

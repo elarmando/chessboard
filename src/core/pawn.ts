@@ -1,9 +1,12 @@
 
 
+import DataSquare from "./dataSquare";
 import Piece from "./piece";
 import PIECES from "./pieces";
 export default class Pawn extends Piece {
-    constructor(isWhite)
+    direction: number;
+
+    constructor(isWhite: boolean)
     {
         super(isWhite);
         this.direction = (isWhite) ? 1 : -1;
@@ -34,7 +37,7 @@ export default class Pawn extends Piece {
             squares.push(chessboard.getSquare(this.row + this.direction * 1, this.col - 1));
         }
 
-        var filtered = [];
+        var filtered : DataSquare[]= [];
 
         squares.forEach(function(e){
             if(e)
@@ -46,7 +49,7 @@ export default class Pawn extends Piece {
     
     getPossibleMoves () {
         var chessboard = this.chessboard;
-        var attacked = this.getAttackedSquares(chessboard);
+        var attacked = this.getAttackedSquares();
         var possible = [];
 
         //attacked squares are possible if there is a different color piece
@@ -72,7 +75,7 @@ export default class Pawn extends Piece {
         return possible;
     }
 
-    isValidMove (dataSquareOrig, dataSquareDest) {
+    isValidMove (dataSquareOrig :DataSquare, dataSquareDest: DataSquare) {
         if (this.canMoveForward(dataSquareOrig, dataSquareDest))
             return true;
 
@@ -82,7 +85,7 @@ export default class Pawn extends Piece {
         return false;
     }
 
-    canMoveForward (dataSquareOrig, dataSquareDest) {
+    canMoveForward (dataSquareOrig: DataSquare, dataSquareDest: DataSquare) {
         /*
             pawn can move forward one square and two squares in the first movement
             only if destiny is a free square 
@@ -103,7 +106,7 @@ export default class Pawn extends Piece {
         return false;
     }
 
-    canMoveDiagonal (squareOrig, squareDest) {
+    canMoveDiagonal (squareOrig: DataSquare, squareDest: DataSquare) {
         var dir = this.direction * 1;
         var isRighDiagonal = squareOrig.col == squareDest.col + 1 && squareOrig.row + dir == squareDest.row;
         var canCapture = squareDest.piece != null && squareDest.piece.isWhite != this.isWhite;
@@ -111,12 +114,11 @@ export default class Pawn extends Piece {
         if (isRighDiagonal && canCapture)
             return true;
 
-        var isLeftDiagonal = squareOrig.col = squareDest.col - 1 && squareOrig.row + dir == squareDest.row;
+        var isLeftDiagonal = squareOrig.col == squareDest.col - 1 && squareOrig.row + dir == squareDest.row;
 
         if (isLeftDiagonal && canCapture)
             return true;
 
         return false;
     }
-
 }
