@@ -1,16 +1,21 @@
 import DataSquare from "./dataSquare";
-export default function Computer(chessboard)
-{
-    var self = this;
-    this.isWhite = false;
-    this.chessboard = chessboard;
+import PieceMove from "./pieceMove";
 
-    this.move = function()
+export default class Computer
+{
+    isWhite: boolean = false;
+    chessboard:any;
+
+    constructor(chessboard:any){
+        this.chessboard = chessboard;
+    }
+
+    public move()
     {
-        if(!self._isMyTurn())
+        if(!this._isMyTurn())
             return;
 
-        var moves = self._getValidMoves();
+        var moves = this._getValidMoves();
 
         if(moves.length == 0)
             return;
@@ -19,32 +24,32 @@ export default function Computer(chessboard)
         //var index = moves.length - 1;
         var move = moves[index];
 
-        chessboard.move(move.squareFrom, move.squareTo);
+        this.chessboard.move(move.squareFrom, move.squareTo);
     }
 
-    this.findCheckMate = function()
+    /*public findCheckMate()
     {
         var finder = new CheckMate();
         var moves = finder.find(this.chessboard);
         return moves;
-    }
+    }*/
 
-    this._getValidMoves = function()
+    private _getValidMoves()
     {
-        var moves = this._getMoves();
-        var validMoves = [];
+        var moves = this._getMoves() as PieceMove[];
+        var validMoves: PieceMove[] = [];
 
         moves.forEach(e => {
-            if(chessboard.isValidMove(e.squareFrom, e.squareTo))
+            if(this.chessboard.isValidMove(e.squareFrom, e.squareTo))
                 validMoves.push(e);
         });
 
         return validMoves;
     }
 
-    this._getMoves = function()
+    private _getMoves()
     {
-        var pieces = chessboard.getPieces(self.isWhite);
+        var pieces = this.chessboard.getPieces(this.isWhite);
         var listOfMoves = [];
 
         for(var i = 0; i < pieces.length; i++)
@@ -63,9 +68,9 @@ export default function Computer(chessboard)
         return listOfMoves;
     }
 
-    this._isMyTurn = function()
+    private _isMyTurn()
     {
-        return self.isWhite == chessboard.isWhiteTurn;
+        return this.isWhite == this.chessboard.isWhiteTurn;
     }
 }
 
@@ -112,9 +117,13 @@ export default function Computer(chessboard)
 
 export class CheckMate
 {
-    MAX_DEPTH = 10;
+    MAX_DEPTH: number;
 
-    search(chessboard, depth, current_moves)
+    constructor(){
+        this.MAX_DEPTH = 10;
+    }
+
+    public search(chessboard: any, depth: number, current_moves: any[]):any[]
     {
         if(depth === undefined)
             depth = 1;
@@ -156,8 +165,3 @@ function PieceMove(squareFrom, squareTo)
     this.squareTo = squareTo;
 }*/
 
-function PieceMove(squareFrom, squareTo)
-{
-    this.squareFrom = squareFrom;
-    this.squareTo = squareTo;
-}

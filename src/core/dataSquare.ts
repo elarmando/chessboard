@@ -3,7 +3,7 @@ export default class DataSquare {
     row:number;
     piece:any;
   
-    constructor(col:number, row:number, piece:any)
+    constructor(col:number, row:number, piece?:any)
     {
       this.col = col;
       this.row = row;
