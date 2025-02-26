@@ -1,4 +1,4 @@
-import Board from "../src/core/board.js"
+import Board from "../src/core/board"
 import PieceFactory from "../src/core/PieceFactory"
 import Pawn from "../src/core/pawn"
 

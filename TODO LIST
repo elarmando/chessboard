@@ -18,6 +18,8 @@
 
 (x) setup position from fen
 
+() promotion
+
 () Page to solve mates
     (X) copy position from fen
     () it finds the checkmate but not the optimal one

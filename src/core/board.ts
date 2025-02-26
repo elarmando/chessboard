@@ -2,8 +2,16 @@ import King from "./king";
 import Rook from "./rook";
 import DataSquare from "./dataSquare";
 import Square from "./square"
+import Piece from "./piece";
+import PieceMove from "./pieceMove";
 
 export default class ChessBoard {
+    MAX_COL:number;
+    MAX_ROW:number;
+    isWhiteTurn: boolean;
+    squares: Square[][] = [];
+    onAfterMove?: ()=> void;
+ 
   constructor()
   {
     this.MAX_COL = 7;
@@ -14,15 +22,15 @@ export default class ChessBoard {
     this._init();
   }
 
-  _init () {
+  private _init () {
     this._createBoard();
   };
 
-  _createBoard () {
+  private _createBoard () {
     this.squares = [];
 
     for (var i = 0; i < 8; i++) {
-      var row = [];
+      var row: Square[] = [];
       this.squares.push(row);
 
       for (var j = 0; j < 8; j++) {
@@ -31,20 +39,20 @@ export default class ChessBoard {
     }
   };
 
-  clear(){
+  public clear(){
     this.squares = [];
     this._createBoard();
   }
 
-  setBlackTurn(){
+  public setBlackTurn(){
     this.isWhiteTurn = false;
   }
 
-  setWhiteTurn(){
+  public setWhiteTurn(){
     this.isWhiteTurn = true;
   }
 
-  copy()
+  public copy()
   {
     var newBoard = new ChessBoard();
     newBoard.isWhiteTurn = this.isWhiteTurn;
@@ -65,7 +73,7 @@ export default class ChessBoard {
     return newBoard;
   }
 
-  addPiece (squareStrings, piece) {
+  public addPiece (squareStrings: string, piece: Piece) {
     var square = this.convertSquareString(squareStrings);
 
     var row = square.row;
@@ -75,17 +83,17 @@ export default class ChessBoard {
 
     if (col > 8 || col < 0) return;
 
-    var square = this.squares[row][col];
+    var boardSquare = this.squares[row][col];
 
     if (piece) {
-      square.piece = piece;
+      boardSquare.piece = piece;
       piece.col = col;
       piece.row = row;
       piece.chessboard = this;
     }
   };
 
-  getPiece (row, col) {
+  public getPiece (row: number, col: number) {
     if (typeof row == "string") {
       var square = this.convertSquareString(row);
 
@@ -95,33 +103,39 @@ export default class ChessBoard {
       }
     }
 
-    var piece = this.squares[row][col];
-    piece = piece == undefined ? null : piece.piece;
+    let sq: Square = this.squares[row][col];
+    let piece = sq == undefined ? null : sq.piece;
 
     return piece;
   };
 
-  getSquare (row, col) {
+  public getSquare (row: number | string, col?: number) {
+    let indexRow = 0, indexCol = 0;
+
     if(typeof row == "string"){
       var square = this.convertSquareString(row);
 
       if(square){
-        row = square.row;
-        col = square.col;
+        indexRow = square.row;
+        indexCol = square.col;
       }
-
     }
-    if (!this.squares[row]) return;
+    else{
+      indexRow = row;
+      indexCol = col;
+    }
 
-    if (!this.squares[row][col]) return null;
+    if (!this.squares[indexRow]) return;
 
-    var piece = this.squares[row][col].piece;
-    var dataSquare = new DataSquare(col, row, piece);
+    if (!this.squares[indexRow][indexCol]) return null;
+
+    var piece = this.squares[indexRow][indexCol].piece;
+    var dataSquare = new DataSquare(indexCol, indexRow, piece);
 
     return dataSquare;
   };
 
-  _internalMove (from, to) {
+  private _internalMove (from: DataSquare | string, to: DataSquare | string) {  
     var fromSquare =
       from instanceof DataSquare ? from : this.convertSquareString(from);
     var toSquare = to instanceof DataSquare ? to : this.convertSquareString(to);
@@ -152,7 +166,7 @@ export default class ChessBoard {
     piece.row = toSquare.row;
   };
 
-  move (from, to) {
+  public move (from: DataSquare | string, to: DataSquare | string) {
     var fromSquare = from instanceof DataSquare ? from : this.convertSquareString(from);
     var toSquare = to instanceof DataSquare ? to : this.convertSquareString(to);
 
@@ -189,7 +203,7 @@ export default class ChessBoard {
 
   
 
-  isCheck (isWhite) {
+  public isCheck (isWhite: boolean) {
     if(isWhite === undefined)
       isWhite = this.isWhiteTurn;
     
@@ -269,18 +283,18 @@ export default class ChessBoard {
     return true;
   };
 
-  _getKing (isWhite) {
+  /*private _getKing (isWhite: boolean) {
     var pieces = this.getPieces(isWhite);
     var king = null;
 
-    this.forEachPiece((e) => {
+    this.forEachPiece((e: Piece) => {
       if (e instanceof King) king = e;
     });
 
     return king;
-  };
+  };*/
 
-  _isPieceAttackingKing (king, pieces) {
+  private _isPieceAttackingKing (king: Piece, pieces: Piece[]) {
     var isCheck = false;
 
     for (var i = 0; i < pieces.length && !isCheck; i++) {
@@ -295,7 +309,7 @@ export default class ChessBoard {
     return isCheck;
   };
 
-  _findKing (pieces) {
+  private _findKing (pieces: Piece[]) {
     var king = null;
 
     for (var i = 0; i < pieces.length; i++) {
@@ -308,18 +322,18 @@ export default class ChessBoard {
     return king;
   };
 
-  getBlackPieces () {
+  public getBlackPieces () {
     return this.getPieces(false);
   };
 
-  getWhitePieces () {
+  public getWhitePieces () {
     return this.getPieces(true);
   };
 
-  getPieces (isWhite) {
-    var pieces = [];
+  public getPieces (isWhite: boolean) {
+    var pieces: Piece[] = [];
 
-    this.forEachPiece(function (piece) {
+    this.forEachPiece(function (piece: Piece) {
       if (piece.isWhite == isWhite) {
         pieces.push(piece);
       }
@@ -328,7 +342,7 @@ export default class ChessBoard {
     return pieces;
   };
 
-  _isCastle (fromSquare, toSquare) {
+  private _isCastle (fromSquare: {col: number, row: number}, toSquare: {col: number, row: number}) {
     var squareOrig = this.squares[fromSquare.row][fromSquare.col];
 
     if (squareOrig.piece == null || !(squareOrig.piece instanceof King))
@@ -341,7 +355,7 @@ export default class ChessBoard {
     return isFirstRank && isKingOriginalPosition && isCastleColumn;
   }
 
-  isValidMove (from, to) {
+  isValidMove (from: DataSquare | string, to: DataSquare | string) {
     var fromSquare = null;
     var toSquare = null;
 
@@ -385,7 +399,7 @@ export default class ChessBoard {
       pieceDest ? pieceDest.piece : null
     );
 
-    var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest, this);
+    var validMove = pieceOrig.piece.isValidMove(dataOrig, dataDest);
 
     if (validMove) {
       var backupPiece = pieceDest.piece;
@@ -406,7 +420,7 @@ export default class ChessBoard {
     return validMove;
   };
 
-  forEachPiece (callback) {
+  forEachPiece (callback: Function) {
     if (!(callback instanceof Function)) return;
 
     for (var i = 0; i < 8; i++) {
@@ -419,13 +433,13 @@ export default class ChessBoard {
     }
   };
 
-  getSquaresProtectedBy(protectedByWhite) {
+  getSquaresProtectedBy(protectedByWhite: boolean) {
     protectedByWhite = protectedByWhite === undefined ? true : protectedByWhite;
-    var squares = [];
+    var squares: DataSquare[] = [];
 
-    this.forEachPiece((piece) => {
+    this.forEachPiece((piece: Piece) => {
       if (piece.isWhite == protectedByWhite) {
-        var sqs = piece.getProtectedSquares(this);
+        var sqs = piece.getProtectedSquares();
         sqs.forEach((e) => {
           squares.push(e);
         });
@@ -435,13 +449,13 @@ export default class ChessBoard {
     return squares;
   }
 
-  getSquaresAttackedBy (attackedByWhite) {
+  getSquaresAttackedBy (attackedByWhite: boolean) {
     attackedByWhite = attackedByWhite === undefined ? true : attackedByWhite;
-    var squares = [];
+    var squares: DataSquare[] = [];
 
-    this.forEachPiece((piece) => {
+    this.forEachPiece((piece: Piece) => {
       if (piece.isWhite == attackedByWhite) {
-        var sqs = piece.getAttackedSquares(this);
+        var sqs = piece.getAttackedSquares();
         sqs.forEach((e) => {
           squares.push(e);
         });
@@ -451,14 +465,14 @@ export default class ChessBoard {
     return squares;
   };
 
-  getMoves()
+  public getMoves()
   {
     return this._getValidMoves();
   }
 
   _getValidMoves(){
     var moves = this._getMoves();
-    var validMoves = [];
+    var validMoves: PieceMove[] = [];
 
     moves.forEach(e => {
       if (this.isValidMove(e.squareFrom, e.squareTo))
@@ -486,7 +500,7 @@ export default class ChessBoard {
     return listOfMoves;
   }
 
-  convertPositionToString(col, row) {
+  convertPositionToString(col: number, row: number) {
     var cols = {
       0: "a",
       1: "b",
@@ -496,7 +510,7 @@ export default class ChessBoard {
       5: "f",
       6: "g",
       7: "h",
-    };
+    } as any;
 
     var rows = {
       7: "8",
@@ -507,7 +521,7 @@ export default class ChessBoard {
       2: "3",
       1: "2",
       0: "1",
-    };
+    } as any;
 
     var res = null;
 
@@ -526,7 +540,7 @@ export default class ChessBoard {
     return this.MAX_ROW;
   };
 
-  convertSquareString(square) {
+  convertSquareString(square: string){
     var cols = {
       a: 0,
       b: 1,
@@ -536,7 +550,7 @@ export default class ChessBoard {
       f: 5,
       g: 6,
       h: 7,
-    };
+    } as any;
 
     var rows = {
       8: 7,
@@ -547,7 +561,7 @@ export default class ChessBoard {
       3: 2,
       2: 1,
       1: 0,
-    };
+    }as any;
 
     if (square.length != 2) return null;
 
@@ -556,14 +570,8 @@ export default class ChessBoard {
 
     if (col == undefined || row == undefined) return null;
 
+    //return this.getSquare(row, col);
     return { col: col, row: row };
   };
-
 }
 
-
-function PieceMove(squareFrom, squareTo)
-{
-    this.squareFrom = squareFrom;
-    this.squareTo = squareTo;
-}
