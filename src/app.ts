@@ -6,7 +6,7 @@ import ChessboardIU from "./core/ui";
 (function(){
 
     var chessboard = null;
-    var ui = null;
+    var ui:any = null;
 
 
     var init =  function()
