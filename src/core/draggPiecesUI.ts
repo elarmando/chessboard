@@ -76,13 +76,13 @@ export default class DraggPieces
             return;
         }
 
-        var deltaX = e.clientX - this.mouseX;
-        var deltaY = e.clientY - this.mouseY;
+        let deltaX = e.clientX + this.mouseX;
+        let deltaY = e.clientY - this.mouseY;
         
-        var rect = this.draggingElement.getBoundingClientRect();
+        let rect = this.draggingElement.getBoundingClientRect();
 
-        var newX = rect.x + deltaX;
-        var newY = rect.y + deltaY;
+        let newX = rect.x + deltaX;
+        let newY = rect.y + deltaY;
 
         this.draggingElement.style.top = newY + "px";
         this.draggingElement.style.left = newX + "px";
