@@ -6,8 +6,8 @@ import ChessboardIU from "../core/ui";
 
 (function(){
 
-    var chessboard = null;
-    var ui = null;
+    var chessboard: ChessBoard = null;
+    var ui: ChessboardIU = null;
     var submitFenId = "fen-submit";
     var textAreaFen = "fen-textarea";
     var nextMoveButtonId = "next-move";
@@ -15,7 +15,7 @@ import ChessboardIU from "../core/ui";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     var mateFen = "8/8/8/2Q5/8/r7/k1K5/8 w - - 0 1";
 
-    var movesFound = [];
+    var movesFound: any[] = [];
     var currentMoveIndex = -1;
 
     var annotations = new Annotations();
@@ -46,10 +46,10 @@ import ChessboardIU from "../core/ui";
         nextMoveButton.addEventListener("click", nextMove);
     }
 
-    var onSetupFen = function(e)
+    var onSetupFen = function(e: any)
     {
         e.preventDefault();
-        var textArea = document.getElementById(textAreaFen);
+        var textArea = document.getElementById(textAreaFen) as any;
         var txt = textArea.value;
 
         let position = new Position();

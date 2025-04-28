@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: {
     "app": './src/app.ts',
-    "mate/mate": "./src/mate/mate.js"
+    "mate/mate": "./src/mate/mate.ts"
   },
   output: {
     filename: '[name].js',

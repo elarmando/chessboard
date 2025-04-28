@@ -123,7 +123,7 @@ export class CheckMate
         this.MAX_DEPTH = 10;
     }
 
-    public search(chessboard: any, depth: number, current_moves: any[]):any[]
+    public search(chessboard: any, depth?: number, current_moves?: any[]):any[]
     {
         if(depth === undefined)
             depth = 1;
