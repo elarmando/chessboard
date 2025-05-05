@@ -1,4 +1,5 @@
 import ChessBoard from "../core/board";
+import { SearchMove } from "../core/computer";
 
 export default class Annotations{
     id: string;
@@ -20,22 +21,61 @@ export default class Annotations{
             {white: "Cg5+", black: null},
         ];
 
-        this.currentMove = {index: 0, color: "white"}
+        this.currentMove = {index: -1, color: "white"}
 
         var prevBtn = document.querySelector(this.previousButtonId);
-        var nextBtn = document.querySelector(this.nextButtonId);
 
         prevBtn.addEventListener("click", () => this.onClickPreviousButton());
-        nextBtn.addEventListener("click", () => this.onClickNextButton());
     }
 
 
-    public setMoves(moves: AnnotationMove[]){
-        this.moves = moves;
-        this.currentMove = {index: 0, color: "white"};
+    public updateMoves(moves: SearchMove[]){
+        let movesFound = moves;
+        if(movesFound === null)
+            return;
+
+        let annotationMoves = this.convert(moves);
+
+        this.moves = annotationMoves;
+        this.currentMove = {index: -1, color: "white"};
+        this.draw();
     }
 
-    goNext(){
+    public next() {
+        if (this.currentMove.color == "black" && (this.currentMove.index + 1) >= this.moves.length)
+            return;
+
+        this.removeCurrentSelection();
+        this.goNext();
+        this.addCurrentSelection();
+
+   }
+    
+    private convert(moves: SearchMove[]) : AnnotationMove[]
+    {
+        let movesFound = moves;
+        var annotationMoves = [];
+
+        //convert from SearchMove to 
+        for(var i = 0; i < movesFound.length; i+=2){
+            var whiteMove = movesFound[i];
+
+            var annotationMove = new AnnotationMove();
+            annotationMove.white = whiteMove.stringMove;
+
+            if(i + 1 < movesFound.length){
+                var blackMove = movesFound[i + 1];
+                annotationMove.black = blackMove.stringMove;
+            }
+
+            annotationMoves.push(annotationMove);
+        }
+
+        return annotationMoves;
+    }
+
+
+    private goNext(){
         let { index, color } = this.currentMove;
         //update current to next data
         if (index < 0) {
@@ -52,7 +92,7 @@ export default class Annotations{
         }
     }
 
-    goPrevious(){
+    private goPrevious(){
         let { index, color } = this.currentMove;
         //update current to next data
         if (index < 0) {
@@ -69,7 +109,7 @@ export default class Annotations{
         }
     }
 
-    onClickPreviousButton(){
+    private onClickPreviousButton(){
         if(this.currentMove.index == 0 && this.currentMove.color == "white")
             return;
 
@@ -78,31 +118,27 @@ export default class Annotations{
         this.addCurrentSelection();
     }
 
-    onClickNextButton() {
-        if (this.currentMove.color == "black" && (this.currentMove.index + 1) >= this.moves.length)
-            return;
+   
 
-        this.removeCurrentSelection();
-        this.goNext();
-        this.addCurrentSelection();
-
-   }
-
-    removeCurrentSelection(){
+    private removeCurrentSelection(){
         let { index, color } = this.currentMove;
+
+        if(index < 0)return;
 
         //remove class of previous move
         let currentMove = this.getMoveInDom(index, color);
         currentMove.className = currentMove.className.replace("current", "");
     }
 
-    addCurrentSelection() {
+    private addCurrentSelection() {
+        if(this.currentMove.index < 0)return;
+
         //update class of current move
         let nextMove = this.getMoveInDom(this.currentMove.index, this.currentMove.color);
         nextMove.className += " current";
     }
 
-    getMoveInDom(index: number, color: string) {
+    private getMoveInDom(index: number, color: string) {
         var cls = ".move_" + index + "." + color;
         var current = document.querySelector(cls);
 

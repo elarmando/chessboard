@@ -10,7 +10,7 @@ import ChessboardIU from "../core/ui";
     var ui: ChessboardIU = null;
     var submitFenId = "fen-submit";
     var textAreaFen = "fen-textarea";
-    var nextMoveButtonId = "next-move";
+    var nextMoveButtonId = "btn-next";
     var checkMateButtonId = "find-checkmate";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     var mateFen = "8/8/8/2Q5/8/r7/k1K5/8 w - - 0 1";
@@ -64,7 +64,7 @@ import ChessboardIU from "../core/ui";
         if(solution != null){
             console.log(solution);
             movesFound = solution;
-            currentMoveIndex = 0;
+            currentMoveIndex = -1;
             updateAnnotations();
         }
         else{
@@ -78,36 +78,25 @@ import ChessboardIU from "../core/ui";
         if(movesFound === null)
             return;
 
-        var annotationMoves = [];
-
-        for(var i = 0; i < movesFound.length; i+=2){
-            var whiteMove = movesFound[i];
-
-            var annotationMove = new AnnotationMove();
-            annotationMove.white = whiteMove.stringMove;
-
-            if(i + 1 < movesFound.length){
-                var blackMove = movesFound[i + 1];
-                annotationMove.black = blackMove.stringMove;
-            }
-
-            annotationMoves.push(annotationMove);
-        }
-
-        annotations.setMoves(annotationMoves);
-        annotations.draw();
+        annotations.updateMoves(movesFound);
     }
 
     var nextMove = function(){
         if(movesFound.length == 0)
             return;
 
+        if(currentMoveIndex + 1 >= movesFound.length)
+            return;
+
+        currentMoveIndex++;
+
         var move = movesFound[currentMoveIndex];
 
         if(move){
             chessboard.move(move.squareFrom, move.squareTo);
-            currentMoveIndex++;
+            annotations.next();
 
+            annotations.draw();
             ui.draw();
         }
 
