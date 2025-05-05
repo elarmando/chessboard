@@ -491,8 +491,14 @@ export default class ChessBoard {
       var moves = piece.getPossibleMoves();
 
       for (var j = 0; j < moves.length; j++) {
-        var squareFrom = new DataSquare(piece.col, piece.row);
+        var squareFrom = new DataSquare(piece.col, piece.row, piece);
         var squareTo = moves[j];
+
+        var actualSquareTo = this.squares[squareTo.row][squareTo.col];
+
+        if(actualSquareTo.piece != null)
+          squareTo.piece = actualSquareTo.piece;
+        
         listOfMoves.push(new PieceMove(squareFrom, squareTo));
       }
     }

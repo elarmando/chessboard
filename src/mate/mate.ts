@@ -1,7 +1,7 @@
 import ChessBoard from "../core/board";
-import Computer, {CheckMate} from "../core/computer";
+import Computer, {CheckMate, SearchMove} from "../core/computer";
 import Position from "../core/position"
-import Annotations from "./annotations";
+import Annotations, { AnnotationMove } from "./annotations";
 import ChessboardIU from "../core/ui";
 
 (function(){
@@ -15,7 +15,7 @@ import ChessboardIU from "../core/ui";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     var mateFen = "8/8/8/2Q5/8/r7/k1K5/8 w - - 0 1";
 
-    var movesFound: any[] = [];
+    var movesFound: SearchMove[] = [];
     var currentMoveIndex = -1;
 
     var annotations = new Annotations();
@@ -65,12 +65,37 @@ import ChessboardIU from "../core/ui";
             console.log(solution);
             movesFound = solution;
             currentMoveIndex = 0;
+            updateAnnotations();
         }
         else{
             alert("check mate not found");
         }
 
         console.log("find checkmate");
+    }
+
+    var updateAnnotations = function(){
+        if(movesFound === null)
+            return;
+
+        var annotationMoves = [];
+
+        for(var i = 0; i < movesFound.length; i+=2){
+            var whiteMove = movesFound[i];
+
+            var annotationMove = new AnnotationMove();
+            annotationMove.white = whiteMove.stringMove;
+
+            if(i + 1 < movesFound.length){
+                var blackMove = movesFound[i + 1];
+                annotationMove.black = blackMove.stringMove;
+            }
+
+            annotationMoves.push(annotationMove);
+        }
+
+        annotations.setMoves(annotationMoves);
+        annotations.draw();
     }
 
     var nextMove = function(){

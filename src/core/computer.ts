@@ -1,5 +1,7 @@
 import DataSquare from "./dataSquare";
 import PieceMove from "./pieceMove";
+import ChessBoard from "./board";
+import Utils from "./utils";
 
 export default class Computer
 {
@@ -123,7 +125,7 @@ export class CheckMate
         this.MAX_DEPTH = 10;
     }
 
-    public search(chessboard: any, depth?: number, current_moves?: any[]):any[]
+    public search(chessboard: ChessBoard, depth?: number, current_moves?: any[]):SearchMove[]
     {
         if(depth === undefined)
             depth = 1;
@@ -145,9 +147,13 @@ export class CheckMate
             var move = moves[i];
 
             var copy = chessboard.copy();
+
+            var strMove = this.convertMoveToStr(copy, move);
+            var newMove = new SearchMove(move.squareFrom, move.squareTo, strMove);
+
             copy.move(move.squareFrom, move.squareTo);
 
-            var variation_moves = [...current_moves, move];
+            var variation_moves = [...current_moves, newMove];
             var solution = this.search(copy, depth + 1, variation_moves);
 
             if(solution != null){
@@ -157,7 +163,25 @@ export class CheckMate
 
         return null;
     }
+
+    private convertMoveToStr(chessboard: ChessBoard, pieceMove: PieceMove): string{
+        var utils = new Utils(chessboard);
+        var str =  utils.getMoveAsString(pieceMove.squareFrom, pieceMove.squareTo);
+        return str;
+    }
 } 
+
+export class SearchMove{
+    squareFrom: DataSquare;
+    squareTo: DataSquare;
+    stringMove: string;
+
+    constructor(squareFrom: DataSquare, squareTo: DataSquare, strMove: string){
+        this.squareFrom = squareFrom;
+        this.squareTo = squareTo;
+        this.stringMove = strMove;
+    }
+}
 /*
 function PieceMove(squareFrom, squareTo)
 {

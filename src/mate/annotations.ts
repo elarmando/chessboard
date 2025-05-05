@@ -3,9 +3,8 @@ import ChessBoard from "../core/board";
 export default class Annotations{
     id: string;
     classList: string;
-    moves: any[];
+    moves: AnnotationMove[];
     chessboard: ChessBoard;
-    indexMove: number;
     nextButtonId: string;
     previousButtonId: string;
     currentMove:{index: number, color: string};
@@ -30,7 +29,11 @@ export default class Annotations{
         nextBtn.addEventListener("click", () => this.onClickNextButton());
     }
 
-    
+
+    public setMoves(moves: AnnotationMove[]){
+        this.moves = moves;
+        this.currentMove = {index: 0, color: "white"};
+    }
 
     goNext(){
         let { index, color } = this.currentMove;
@@ -125,4 +128,9 @@ export default class Annotations{
 
         this.addCurrentSelection();
     }
+}
+
+export class AnnotationMove{
+    public white:string;
+    public black:string;
 }
