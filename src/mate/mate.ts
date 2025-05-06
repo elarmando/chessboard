@@ -11,9 +11,11 @@ import ChessboardIU from "../core/ui";
     var submitFenId = "fen-submit";
     var textAreaFen = "fen-textarea";
     var nextMoveButtonId = "btn-next";
+    var previousMoveButtonId = "btn-previous";
     var checkMateButtonId = "find-checkmate";
     var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     var mateFen = "8/8/8/2Q5/8/r7/k1K5/8 w - - 0 1";
+    var previousBoards: ChessBoard[] = [];
 
     var movesFound: SearchMove[] = [];
     var currentMoveIndex = -1;
@@ -44,6 +46,9 @@ import ChessboardIU from "../core/ui";
 
         var nextMoveButton =  document.getElementById(nextMoveButtonId);
         nextMoveButton.addEventListener("click", nextMove);
+
+        var previousMoveButtton = document.getElementById(previousMoveButtonId);
+        previousMoveButtton.addEventListener("click", previousMove);
     }
 
     var onSetupFen = function(e: any)
@@ -93,12 +98,34 @@ import ChessboardIU from "../core/ui";
         var move = movesFound[currentMoveIndex];
 
         if(move){
+            var copy = chessboard.copy();
+            previousBoards.push(copy);
+
             chessboard.move(move.squareFrom, move.squareTo);
             annotations.next();
 
             annotations.draw();
             ui.draw();
         }
+    }
+
+    var previousMove = function(){
+        if(currentMoveIndex <= 0)
+            return;
+
+        var previousBoard = previousBoards.pop();
+
+        if(previousBoard !== undefined){
+            currentMoveIndex--;
+            chessboard = previousBoard;
+
+            ui.updateBoard(chessboard);
+            annotations.previous();
+
+            annotations.draw();
+            ui.draw();
+        }
+
 
     }
 

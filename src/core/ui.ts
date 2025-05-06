@@ -1,3 +1,4 @@
+import ChessBoard from "./board";
 import DraggPieces from "./draggPiecesUI"
 
 
@@ -16,6 +17,11 @@ export default class ChessboardIU
         this.chessboard = chessboard;
 
         this._init();
+    }
+
+    public updateBoard(chessboard: ChessBoard){
+        this.chessboard = chessboard;
+        this.draw();
     }
 
    draw()
@@ -45,8 +51,6 @@ export default class ChessboardIU
 
          }
     }
-
-
    
     _init()
     {

@@ -22,10 +22,6 @@ export default class Annotations{
         ];
 
         this.currentMove = {index: -1, color: "white"}
-
-        var prevBtn = document.querySelector(this.previousButtonId);
-
-        prevBtn.addEventListener("click", () => this.onClickPreviousButton());
     }
 
 
@@ -48,7 +44,15 @@ export default class Annotations{
         this.removeCurrentSelection();
         this.goNext();
         this.addCurrentSelection();
+   }
 
+   public previous(){
+    if(this.currentMove.index == 0 && this.currentMove.color == "white")
+        return;
+
+    this.removeCurrentSelection();
+    this.goPrevious();
+    this.addCurrentSelection();
    }
     
     private convert(moves: SearchMove[]) : AnnotationMove[]
@@ -108,17 +112,6 @@ export default class Annotations{
             }
         }
     }
-
-    private onClickPreviousButton(){
-        if(this.currentMove.index == 0 && this.currentMove.color == "white")
-            return;
-
-        this.removeCurrentSelection();
-        this.goPrevious();
-        this.addCurrentSelection();
-    }
-
-   
 
     private removeCurrentSelection(){
         let { index, color } = this.currentMove;
