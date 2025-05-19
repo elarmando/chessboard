@@ -16,9 +16,6 @@ export default class Annotations{
         this.previousButtonId = ".previousButton";
         this.classList = ".moves"
         this.moves = [
-            {white: "Bxf7+", black: "Txf7"},
-            {white: "Cxf7", black: "Kxf7"},
-            {white: "Cg5+", black: null},
         ];
 
         this.currentMove = {index: -1, color: "white"}

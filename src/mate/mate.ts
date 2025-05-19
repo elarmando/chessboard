@@ -13,8 +13,8 @@ import ChessboardIU from "../core/ui";
     var nextMoveButtonId = "btn-next";
     var previousMoveButtonId = "btn-previous";
     var checkMateButtonId = "find-checkmate";
-    var defaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    var mateFen = "8/8/8/2Q5/8/r7/k1K5/8 w - - 0 1";
+    var defaultFen = "8/8/8/8/8/1K6/5Q2/1k6 w - - 0 1";
+    var mateFen = "8/8/8/8/8/1K6/5Q2/1k6 w - - 0 1";
     var previousBoards: ChessBoard[] = [];
 
     var movesFound: SearchMove[] = [];
@@ -29,8 +29,8 @@ import ChessboardIU from "../core/ui";
         chessboard = new ChessBoard();
         ui = new ChessboardIU(".chessboard", chessboard);
 
-        let position = new Position();
-        position.setupFromFen(mateFen, chessboard);
+        setNewFen(mateFen);
+        updatePositionAndMoves(mateFen);
 
         ui.draw();
         annotations.draw();
@@ -38,11 +38,8 @@ import ChessboardIU from "../core/ui";
 
     var initHandlers = function()
     {
-        var submitFen = document.getElementById(submitFenId);
-        submitFen.addEventListener("click", onSetupFen, false);
-
         var checkMateButton = document.getElementById(checkMateButtonId);
-        checkMateButton.addEventListener("click", findCheckMate);
+        checkMateButton.addEventListener("click", onClickCheckMate);
 
         var nextMoveButton =  document.getElementById(nextMoveButtonId);
         nextMoveButton.addEventListener("click", nextMove);
@@ -51,53 +48,63 @@ import ChessboardIU from "../core/ui";
         previousMoveButtton.addEventListener("click", previousMove);
     }
 
-    var onSetupFen = function(e: any)
-    {
+    var onClickCheckMate = function(e:any){
         e.preventDefault();
         var textArea = document.getElementById(textAreaFen) as any;
-        var txt = textArea.value;
+        var fen = textArea.value;
 
-        let position = new Position();
-        position.setupFromFen(txt, chessboard);
-        ui.draw();
+        updatePositionAndMoves(fen);
     }
 
-    var findCheckMate = function(){
+    var updatePositionAndMoves = function(fen: string){
+        let position = new Position();
+        position.setupFromFen(fen, chessboard);
+        ui.draw();
+
+        findCheckMate();
+    }
+
+    var setNewFen = function(fen: string){
+        var textArea = document.getElementById(textAreaFen) as any;
+        textArea.value = fen;
+    }
+
+    var findCheckMate = function () {
         var checkmate = new CheckMate();
         var solution = checkmate.search(chessboard);
 
-        if(solution != null){
+        if (solution != null) {
             console.log(solution);
             movesFound = solution;
             currentMoveIndex = -1;
             updateAnnotations();
         }
-        else{
+        else {
             alert("check mate not found");
         }
 
         console.log("find checkmate");
     }
 
-    var updateAnnotations = function(){
-        if(movesFound === null)
+    var updateAnnotations = function () {
+        if (movesFound === null)
             return;
 
         annotations.updateMoves(movesFound);
     }
 
-    var nextMove = function(){
-        if(movesFound.length == 0)
+    var nextMove = function () {
+        if (movesFound.length == 0)
             return;
 
-        if(currentMoveIndex + 1 >= movesFound.length)
+        if (currentMoveIndex + 1 >= movesFound.length)
             return;
 
         currentMoveIndex++;
 
         var move = movesFound[currentMoveIndex];
 
-        if(move){
+        if (move) {
             var copy = chessboard.copy();
             previousBoards.push(copy);
 
@@ -109,13 +116,13 @@ import ChessboardIU from "../core/ui";
         }
     }
 
-    var previousMove = function(){
-        if(currentMoveIndex <= 0)
+    var previousMove = function () {
+        if (currentMoveIndex <= 0)
             return;
 
         var previousBoard = previousBoards.pop();
 
-        if(previousBoard !== undefined){
+        if (previousBoard !== undefined) {
             currentMoveIndex--;
             chessboard = previousBoard;
 
@@ -129,5 +136,5 @@ import ChessboardIU from "../core/ui";
 
     }
 
-    window.onload  = init;
+    window.onload = init;
 })();

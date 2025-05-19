@@ -1,7 +1,13 @@
 
 .main{
-    display: grid;
+    display: flex;
+    flex-direction: column;
+}
+
+.body-section{
+    display:grid;
     grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
 }
 
 .annotations{
